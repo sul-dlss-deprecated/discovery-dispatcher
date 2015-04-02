@@ -1,5 +1,5 @@
 language: ruby
-script: rake rspec
+script: bundle exec rake rspec
 rvm:
   - 2.1.4
   - 2.0.0
@@ -8,4 +8,5 @@ notifications:
   email:
     - aalsum@stanford.edu
 before_script:
+  - cp config/targets/example.yml config/targets/test.yml
   - "bundle exec rake db:migrate"

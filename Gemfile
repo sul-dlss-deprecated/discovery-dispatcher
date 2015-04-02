@@ -40,7 +40,7 @@ gem 'spring',        group: :development
 gem 'delayed_job_active_record'
 
 gem 'rest-client'
-
+gem 'yard'
 group :development, :test do
   gem "rspec"
   gem 'sqlite3'
