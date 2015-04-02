@@ -38,6 +38,7 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 gem 'delayed_job_active_record'
+gem 'coveralls', require: false
 
 gem 'rest-client'
 gem 'yard'
