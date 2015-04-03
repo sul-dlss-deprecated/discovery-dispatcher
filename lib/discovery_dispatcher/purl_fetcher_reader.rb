@@ -12,20 +12,24 @@ module DiscoveryDispatcher
       begin
         index_records = read_index_list
       rescue =>e
-        raise_error MissingPurlFetcherIndexPage.new  e
+        message = "#{e.message}\n"
+        e.backtrace.each { |l| message = "#{message}#{l}\n"}
+        raise  DiscoveryDispatcher::Errors::MissingPurlFetcherIndexPage.new(message )
       end
 
       begin
         delete_records = read_delete_list       
       rescue =>e
-        raise_error MissingPurlFetcherDeletePage.new  e
+        message = "#{e.message}\n"
+        e.backtrace.each { |l| message = "#{message}#{l}\n"}
+        raise  DiscoveryDispatcher::Errors::MissingPurlFetcherDeletePage.new(message )
       end
 
       all_records = merge_and_sort(index_records, delete_records)
     end
     
     def read_index_list
-      index_page =  RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", {:params => {:start_time => @start_time, :end_time => @end_time}}, :content_type => :json, :accept => :json
+      index_page =  RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", {:params => {:start_time => @start_time, :end_time => @end_time, :content_type => :json, :accept => :json}}
       if index_page.present? then
         return JSON.parse(index_page)
       else
@@ -34,7 +38,7 @@ module DiscoveryDispatcher
     end
     
     def read_delete_list
-      delete_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/deletes", {:params => {:start_time => @start_time, :end_time => @end_time}}, :content_type => :json, :accept => :json
+      delete_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/deletes", {:params => {:start_time => @start_time, :end_time => @end_time, :content_type => :json, :accept => :json}}
       if delete_page.present? then
         return JSON.parse(delete_page) 
       else
