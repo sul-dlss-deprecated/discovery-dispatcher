@@ -44,7 +44,7 @@ gem 'rest-client'
 gem 'yard'
 gem "rspec"
 gem 'rspec-rails', '~> 3.0'
-
+gem 'daemons'
 group :development, :test do
   gem 'sqlite3'
 end
