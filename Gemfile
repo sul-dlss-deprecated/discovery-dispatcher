@@ -42,9 +42,18 @@ gem 'coveralls', require: false
 
 gem 'rest-client'
 gem 'yard'
-group :development, :test do
-  gem "rspec"
-  gem 'sqlite3'
+gem "rspec"
+gem 'rspec-rails', '~> 3.0'
 
-  gem 'rspec-rails', '~> 3.0'
+group :development, :test do
+  gem 'sqlite3'
+end
+
+
+group :deployment do
+  gem 'capistrano', '~> 3.0'
+  gem 'capistrano-rvm'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'lyberteam-capistrano-devel'
 end
