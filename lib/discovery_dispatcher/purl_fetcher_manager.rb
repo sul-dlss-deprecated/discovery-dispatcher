@@ -10,7 +10,7 @@ module DiscoveryDispatcher
     end
     
     def self.set_last_fetch_info(last_read_time, no_of_records)
-      ReaderLogRecords.create(last_read_time: Time.parse(last_read_time).in_time_zone(PACIFIC_TIME_ZONE), record_count: no_of_records)
+      ReaderLogRecords.create(last_read_time: last_read_time.in_time_zone(PACIFIC_TIME_ZONE), record_count: no_of_records)
     end
   end
 end

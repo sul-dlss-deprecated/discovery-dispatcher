@@ -1,13 +1,14 @@
 module DiscoveryDispatcher
-  class IndexingJob < Struct.new(:type, :druid_id, :target, :subtargets)
+  class IndexingJob < Struct.new(:type, :druid, :target, :subtargets)
     def perform
-        
+      
+      druid = druid.sub("druid:","")  
       target_url  = get_target_url target, druid
       method      = get_method type, druid   
       subtarets_param = get_subtarets_param subtargets
     
-      request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}#{subtarets_param}\""
-      
+      request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}#{subtarets_param}\", \"\""
+      puts request_command
       begin
         eval(request_command)
       rescue => e
@@ -17,8 +18,9 @@ module DiscoveryDispatcher
       
     def get_target_url target,druid
       target_urls_hash = Rails.configuration.target_urls
+     # puts ">#{target}<"
       if target_urls_hash.include?(target) then
-        return target_urls_hash[target][:url]
+        return target_urls_hash[target]["url"]
       else
         raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
       end        

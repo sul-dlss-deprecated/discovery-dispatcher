@@ -13,7 +13,7 @@ module DiscoveryDispatcher
       
         DiscoveryDispatcher::IndexingJobManager.enqueu_records(records)
       
-        DiscoveryDispatcher::PurlFetcherDateManager.set_last_fetch_info end_time, records.length
+        DiscoveryDispatcher::PurlFetcherManager.set_last_fetch_info end_time, records.length
       rescue =>e
         # I think we need to raise_error to 
         Rails.logger.error {"Purl fetcher reader failed for the query between #{start_time} and #{end_time}\n#{e.message}"}

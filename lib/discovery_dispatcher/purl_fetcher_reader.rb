@@ -29,7 +29,7 @@ module DiscoveryDispatcher
     end
     
     def read_index_list
-      index_page =  RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", {:params => {:start_time => @start_time, :end_time => @end_time, :content_type => :json, :accept => :json}}
+      index_page =  RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", {:params => {:first_modified => @start_time, :last_modified => @end_time, :content_type => :json, :accept => :json}}
       if index_page.present? then
         return JSON.parse(index_page)
       else
@@ -38,7 +38,8 @@ module DiscoveryDispatcher
     end
     
     def read_delete_list
-      delete_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/deletes", {:params => {:start_time => @start_time, :end_time => @end_time, :content_type => :json, :accept => :json}}
+    #  delete_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/deletes", {:params => {:first_modified => @start_time, :last_modified => @end_time, :content_type => :json, :accept => :json}}
+      delete_page = nil
       if delete_page.present? then
         return JSON.parse(delete_page) 
       else
