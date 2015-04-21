@@ -27,7 +27,7 @@ set :deploy_to, '/opt/app/lyberadmin/discovery-dispatcher'
 set :linked_files, fetch(:linked_files, []).push('config/database.yml')
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log config/environments  vendor/bundle public/system }
+set :linked_dirs, %w{bin log config/environments config/targets vendor/bundle public/system tmp/pids}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -50,17 +50,10 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       execute :touch, release_path.join('tmp/restart.txt')
+      invoke 'delayed_job:restart'
     end
   end
   
-  after :restart, :run_delayed_job do
-    on roles(:app), in: :groups, limit: 3, wait: 10 do
-      within release_path do
-        execute :bundle, :exec, "bin/delayed_job stop"
-        execute :bundle, :exec, "bin/delayed_job start"
-      end
-    end
-  end
   after :publishing, "deploy:migrate"
   after "deploy:migrate", :restart
 
