@@ -49,7 +49,7 @@ group :development, :test do
   gem 'sqlite3'
 end
 
-
+gem "delayed_job_web"
 group :deployment do
   gem 'capistrano', '~> 3.0'
   gem 'capistrano-rvm'

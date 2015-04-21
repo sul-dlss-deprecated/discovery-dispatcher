@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get 'item/new'
 
   get 'item/delete'
+  
+  match "/admin" => DelayedJobWeb, :anchor => false, via: [:get, :post]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
