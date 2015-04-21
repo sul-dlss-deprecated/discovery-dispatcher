@@ -1,8 +1,8 @@
 module DiscoveryDispatcher
-  class IndexingJob < Struct.new(:type, :druid, :target, :subtargets)
+  class IndexingJob < Struct.new(:type, :druid_id, :target, :subtargets)
     def perform
-      
-      druid = druid.sub("druid:","")  
+      Rails.logger.info "Processing #{druid_id} for target #{target}"
+      druid = druid_id.gsub("druid:","")  
       target_url  = get_target_url target, druid
       method      = get_method type, druid   
       subtarets_param = get_subtarets_param subtargets
@@ -14,6 +14,7 @@ module DiscoveryDispatcher
       rescue => e
         raise "#{type} #{druid} with #{request_command} has an error.\n#{e.inspect}\n#{e.message}\n#{e.backtrace}"
       end
+      Rails.logger.info "Completing #{druid_id} for target #{target}"
     end      
       
     def get_target_url target,druid
