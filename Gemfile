@@ -47,6 +47,8 @@ gem 'rspec-rails', '~> 3.0'
 gem 'daemons'
 group :development, :test do
   gem 'sqlite3'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 gem "delayed_job_web"

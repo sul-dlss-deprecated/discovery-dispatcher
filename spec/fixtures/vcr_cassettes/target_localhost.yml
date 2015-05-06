@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:3000/about/version.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: 'OK '
+    headers:
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"74744727a6364d030f9d52f61d067620"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 4085c7e8-a6fc-466b-aa10-a5bdbbb681ef
+      X-Runtime:
+      - '0.003734'
+      Server:
+      - WEBrick/1.3.1 (Ruby/2.0.0/2014-02-24)
+      Date:
+      - Wed, 06 May 2015 18:40:30 GMT
+      Content-Length:
+      - '241'
+      Connection:
+      - Keep-Alive
+    body:
+      encoding: UTF-8
+      string: '{"app_name":"Test engine","rails_env":"development","version":"0.0","last_restart":"n/a","last_deploy":"n/a","solr_cores":{"target1":{"url":"http://localhost:8983/solr/","allow_update":false},"target2":{"url":"http://localhost:8983/solr/"}}}'
+    http_version: 
+  recorded_at: Wed, 06 May 2015 18:40:30 GMT
+recorded_with: VCR 2.9.3
