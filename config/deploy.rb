@@ -1,5 +1,4 @@
 # config valid only for current version of Capistrano
-lock '3.3.5'
 set :rvm_ruby_string, 'ruby-2.1.4'
 
 set :application, 'discovery-dispatcher'
