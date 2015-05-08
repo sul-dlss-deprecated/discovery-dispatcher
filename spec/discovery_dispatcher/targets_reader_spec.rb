@@ -47,15 +47,17 @@ describe DiscoveryDispatcher::TargetsReader do
         expect(DiscoveryDispatcher::TargetsReader.instance.target_urls).to eq({"target1"=>{"url"=>"http://localhost:3000"}, "target2"=>{"url"=>"http://localhost:3000"}})
       end
     end
-    it "raises an error if the service uri is not available" do
+    it "recovers from service uri is not available" do
       VCR.use_cassette("target_localhost_notfound") do
         services_uris = ["http://localhost:3000"] 
         DiscoveryDispatcher::TargetsReader.instance.target_urls={}
-        expect{DiscoveryDispatcher::TargetsReader.instance.download_target_list(services_uris) }.to raise_error
+        DiscoveryDispatcher::TargetsReader.instance.download_target_list(services_uris)
+        expect(DiscoveryDispatcher::TargetsReader.instance.target_urls).to eq({})
       end
     end
-    it "raises an error for services uris equals false" do
-      expect{DiscoveryDispatcher::TargetsReader.instance.download_target_list(false)}.to raise_error
+    it "returns if services uris equals false" do
+      DiscoveryDispatcher::TargetsReader.instance.download_target_list(false) 
+      expect(DiscoveryDispatcher::TargetsReader.instance.target_urls).to eq({})
     end
     
   end

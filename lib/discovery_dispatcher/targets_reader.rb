@@ -20,14 +20,19 @@ module DiscoveryDispatcher
        
     def download_target_list services_uris
       unless services_uris then
-        raise "The target list file doesn't have any target URIs."
+        Rails.logger.warn "Service uris file is empty."
+        return
       end
       services_uris.each do |uri|
-        response = RestClient.get "#{uri}/about/version.json"
-        target_names = JSON.parse(response)["solr_cores"].keys
-        app_name = JSON.parse(response)["app_name"]
-        target_names.each do |target_name|
-          @target_urls[target_name] = {"url"=>uri}
+        begin
+          response = RestClient.get "#{uri}/about/version.json"
+          target_names = JSON.parse(response)["solr_cores"].keys
+          app_name = JSON.parse(response)["app_name"]
+          target_names.each do |target_name|
+            @target_urls[target_name] = {"url"=>uri}
+          end
+        rescue =>e
+          Rails.logger.error "Problem in reading the solr cores from #{uri}.\n\n#{e.inspect}\n#{e.message}\n#{e.backtrace}"
         end
       end
     end

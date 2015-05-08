@@ -1,7 +1,6 @@
 require 'coveralls'
 Coveralls.wear!('rails')
 require 'vcr'
-require 'webmock'
 
 VCR.configure do |config|
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
