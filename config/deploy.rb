@@ -34,8 +34,13 @@ set :linked_dirs, %w{bin log config/environments config/targets vendor/bundle pu
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 namespace :deploy do
+  
+  
+ 
+  
   task :start do
     bundle exec cap setup
   end
