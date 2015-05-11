@@ -11,7 +11,7 @@ module DiscoveryDispatcher
         reader = DiscoveryDispatcher::PurlFetcherReader.new(start_time, end_time)
         records = reader.load_records
       
-        DiscoveryDispatcher::IndexingJobManager.enqueu_records(records)
+        DiscoveryDispatcher::IndexingJobManager.enqueue_records(records)
       
         DiscoveryDispatcher::PurlFetcherManager.set_last_fetch_info end_time, records.length
       rescue =>e
