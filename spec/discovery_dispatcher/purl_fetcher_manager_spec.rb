@@ -11,7 +11,7 @@ describe DiscoveryDispatcher::PurlFetcherManager do
       ReaderLogRecords.create(last_read_time: "2012-01-01T12:00:00 -0800",record_count: 1)
       
       start_time = DiscoveryDispatcher::PurlFetcherManager.get_next_start_time
-      expect(start_time).to eq("2012-01-01T12:00:00-08:00")
+      expect(start_time).to eq("2012-01-01T11:58:00-08:00")
     end
 
     it "should return 1970 as the start time for empty table" do

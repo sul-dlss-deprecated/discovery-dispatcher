@@ -6,7 +6,7 @@ module DiscoveryDispatcher
     PACIFIC_TIME_ZONE = 'Pacific Time (US & Canada)'
     def self.get_next_start_time
       next_start_time = ReaderLogRecords.maximum(:last_read_time) 
-      return next_start_time.nil? ? Time.parse("1970-01-01T12:00:00-08:00").in_time_zone(PACIFIC_TIME_ZONE).iso8601 : next_start_time.in_time_zone(PACIFIC_TIME_ZONE).iso8601
+      return next_start_time.nil? ? Time.parse("1970-01-01T12:00:00-08:00").in_time_zone(PACIFIC_TIME_ZONE).iso8601 : (next_start_time- 2.minutes).in_time_zone(PACIFIC_TIME_ZONE).iso8601
     end
     
     def self.set_last_fetch_info(last_read_time, no_of_records)
