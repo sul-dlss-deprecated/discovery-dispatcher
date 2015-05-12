@@ -1,4 +1,9 @@
 module DiscoveryDispatcher
+  
+  # IndexingJob represents a single job managed by Delayed_job 
+  # @example Enqueue a job into Delayed job queue
+  #  Delayed::Job.enqueue(IndexingJob.new(record[:type], record[:druid], target ))
+  # 
   class IndexingJob < Struct.new(:type, :druid_id, :target)
     
     def perform
@@ -14,12 +19,20 @@ module DiscoveryDispatcher
       Rails.logger.debug "Completing #{druid_id} for target #{target}"
     end      
     
+    # @param druid [String] represents the druid on the form of ab123cd4567
+    # @param method [String] it may be post or delete
+    # @param target_url [String] the url for the indexing service
+    # @return [String] RestClient request command
     def build_request_command(druid, method, target_url)
       request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}\""
       request_command = "#{request_command}, \"\"" if method == "post"
       return request_command
     end
     
+    # It runs the request command
+    # @param druid [String] represents the druid on the form of ab123cd4567
+    # @param type [String] index or delete
+    # @param request_command [String] RestClient request command
     def run_request_command(druid, type, request_command)
       response = nil
       begin
@@ -35,7 +48,8 @@ module DiscoveryDispatcher
       raise "#{type} #{druid} with #{request_command} has an error.\n#{response.code}\n\n#{response.inspect}" if response.code != 200  
     end      
     
-    def get_target_url target,druid
+    # It gets the indexing service url based on the target name  
+    def get_target_url(target,druid)
       target_urls_hash = DiscoveryDispatcher::TargetsReader.instance.target_urls
       if target_urls_hash.include?(target) then
         return target_urls_hash[target]["url"]
@@ -44,7 +58,7 @@ module DiscoveryDispatcher
       end        
     end
     
-    def get_method type, druid 
+    def get_method(type, druid) 
       if type == "index" then
         return "post"
       elsif type == "delete" then

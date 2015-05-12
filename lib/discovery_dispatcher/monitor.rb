@@ -1,6 +1,12 @@
 module DiscoveryDispatcher
+  
+  # It's responsible for initiating the purl fetcher reader since 
+  # the last read time -2 minutes.
+  # @example Run the monitor
+  #   DiscoveryDispatcher::Monitor.run
   class Monitor
-
+    
+    # @raise an error if the method faces any problem in reading from purl-fetcher-reader
     def self.run
       begin
         # Prepare start and end time
@@ -20,6 +26,6 @@ module DiscoveryDispatcher
         raise e
       end
     end
-
   end
+
 end
