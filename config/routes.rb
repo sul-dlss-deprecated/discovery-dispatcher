@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'about/version'
+
   get 'items/new'
 
   get 'items/delete'

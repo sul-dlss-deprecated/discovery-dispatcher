@@ -50,7 +50,7 @@ The dispatcher is using delayed_job as to enequque the upcoming feeds from the p
 ## Manage the application status
 The system is expected to run automatically, you can follow the status of the jobs by visiting the following link
 
-```http://server-name/admin/overview```
+  ``` http://server-name/admin/overview ```
 
 
 
