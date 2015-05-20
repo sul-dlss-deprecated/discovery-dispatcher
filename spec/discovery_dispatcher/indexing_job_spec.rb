@@ -5,7 +5,7 @@ describe DiscoveryDispatcher::IndexingJob do
     it "performs the indexing process successfully" do
       VCR.use_cassette("index_xz404nk7341") do
         index_job = DiscoveryDispatcher::IndexingJob.new("index","xz404nk7341", "target1")
-        DiscoveryDispatcher::TargetsReader.instance.target_urls = {"target1"=>{"url"=>"http://localhost:3000"}}
+        Rails.configuration.targets_url_hash = {"target1"=>{"url"=>"http://localhost:3000"}}
         expect_any_instance_of(DiscoveryDispatcher::IndexingJob).to receive("build_request_command").with("xz404nk7341","post","http://localhost:3000").and_return('RestClient.post "http://localhost:3000/items/xz404nk7341", ""')
         expect_any_instance_of(DiscoveryDispatcher::IndexingJob).to receive("run_request_command").with("xz404nk7341","index",'RestClient.post "http://localhost:3000/items/xz404nk7341", ""')
         index_job.perform
@@ -17,14 +17,14 @@ describe DiscoveryDispatcher::IndexingJob do
   describe ".get_target_url" do
     
     it "should return the url for the target that exists in the targets config" do
-      DiscoveryDispatcher::TargetsReader.instance.target_urls = {"target1"=>{"url"=>"http://target1-service"}}
+      Rails.configuration.targets_url_hash = {"target1"=>{"url"=>"http://target1-service"}}
       index_job = DiscoveryDispatcher::IndexingJob.new 
       url = index_job.get_target_url "target1", ""
       expect(url).to eq("http://target1-service")
     end
     
     it "should raise an error if the target doesn't exist" do
-      Rails.configuration.target_urls = {"target1"=>{:url=>"http://target1-service"}}
+      Rails.configuration.targets_url_hash = {"target1"=>{:url=>"http://target1-service"}}
       index_job = DiscoveryDispatcher::IndexingJob.new 
       expect{index_job.get_target_url "targetX", "ab123cd4567"}.to raise_error("Druid ab123cd4567 refers to target indexer targetX which is not registered within the application")
     end

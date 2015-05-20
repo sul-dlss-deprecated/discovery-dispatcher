@@ -4,11 +4,8 @@ require 'json'
 module DiscoveryDispatcher
   class TargetsReader
         include Singleton
-
-    attr_accessor :target_urls
     
     def read_targets_from_service
-      @target_urls={}
       services_uris = read_services_uris_file
       download_target_list(services_uris)
     end
@@ -19,9 +16,10 @@ module DiscoveryDispatcher
     end
        
     def download_target_list services_uris
+      target_urls={}
       unless services_uris then
         Rails.logger.warn "Service uris file is empty."
-        return
+        return target_urls
       end
       services_uris.each do |uri|
         begin
@@ -29,12 +27,13 @@ module DiscoveryDispatcher
           target_names = JSON.parse(response)["solr_cores"].keys
           app_name = JSON.parse(response)["app_name"]
           target_names.each do |target_name|
-            @target_urls[target_name] = {"url"=>uri}
+            target_urls[target_name] = {"url"=>uri}
           end
         rescue =>e
           Rails.logger.error "Problem in reading the solr cores from #{uri}.\n\n#{e.inspect}\n#{e.message}\n#{e.backtrace}"
         end
       end
+      return target_urls
     end
     
   end

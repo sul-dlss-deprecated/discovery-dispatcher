@@ -13,7 +13,7 @@ module DiscoveryDispatcher
       
     def self.enqueue_delete_record record
       # Iterate through the registered target in the target_url config
-      target_urls_hash = DiscoveryDispatcher::TargetsReader.instance.target_urls
+      target_urls_hash = Rails.configuration.targets_url_hash
       target_urls_hash.keys.each do |target| 
         Delayed::Job.enqueue(IndexingJob.new(record[:type], record[:druid], target )) 
       end
@@ -45,7 +45,7 @@ module DiscoveryDispatcher
     end
       
     def self.get_target_url target
-      target_urls_hash = DiscoveryDispatcher::TargetsReader.instance.target_urls
+      target_urls_hash = Rails.configuration.targets_url_hash
       return target_urls_hash.include?(target) ? target_urls_hash[target]["url"] : nil 
     end
   end

@@ -14,7 +14,7 @@ describe DiscoveryDispatcher::IndexingJobManager do
       record={}
       record[:type]="delete"
       record[:druid]="ab123cd4567"
-      DiscoveryDispatcher::TargetsReader.instance.target_urls={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url2"}}
+      Rails.configuration.targets_url_hash={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url2"}}
       DiscoveryDispatcher::IndexingJobManager.enqueue_delete_record record
      
     end
@@ -81,19 +81,19 @@ describe DiscoveryDispatcher::IndexingJobManager do
     end
     
     it "returns true list with false targets is empty" do
-      DiscoveryDispatcher::TargetsReader.instance.target_urls={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url2"}}
+      Rails.configuration.targets_url_hash={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url2"}}
       true_targets = ["t_target1","t_target2"]
       false_targets = []
       expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(true_targets,false_targets)).to eq(["t_target1","t_target2"]) 
     end
     it "returns false list with true targets is empty" do
-      DiscoveryDispatcher::TargetsReader.instance.target_urls={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url2"}}
+      Rails.configuration.targets_url_hash={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url2"}}
       false_targets = ["t_target1","t_target2"]
       true_targets = []
       expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(true_targets,false_targets)).to eq(["t_target1","t_target2"]) 
     end
     it "removes the duplicate targets with the same url" do
-      DiscoveryDispatcher::TargetsReader.instance.target_urls={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url1"},"t_target3"=>{"url"=>"url2"}}
+      Rails.configuration.targets_url_hash={"t_target1"=>{"url"=>"url1"},"t_target2"=>{"url"=>"url1"},"t_target3"=>{"url"=>"url2"}}
       true_targets = ["t_target1","t_target2"]
       false_targets = ["t_target3"]
       expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(true_targets,false_targets)).to eq(["t_target1","t_target3"]) 

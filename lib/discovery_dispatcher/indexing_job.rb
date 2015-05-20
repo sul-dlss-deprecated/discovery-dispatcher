@@ -50,7 +50,7 @@ module DiscoveryDispatcher
     
     # It gets the indexing service url based on the target name  
     def get_target_url(target,druid)
-      target_urls_hash = DiscoveryDispatcher::TargetsReader.instance.target_urls
+      target_urls_hash = Rails.configuration.targets_url_hash
       if target_urls_hash.include?(target) then
         return target_urls_hash[target]["url"]
       else
