@@ -22,6 +22,7 @@ gem 'rspec-rails', '~> 3.0'
 gem 'daemons'
 gem 'whenever', :require => false
 gem "delayed_job_web"
+gem 'is_it_working-cbeer'
 
 group :development, :test do
   gem 'sqlite3'
