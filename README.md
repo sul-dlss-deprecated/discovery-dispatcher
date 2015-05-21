@@ -43,15 +43,33 @@ The dispatcher depends on a cron job that is scheduled to run every 15 minutes. 
 The dispatcher is using delayed_job as to enequque the upcoming feeds from the purl fetcher. The delayed job process is restarted automatically within each deployment. To restart the delayed_job process manaually, you need to run the following command from the release_directory
 
 ```	
-	RAILS_ENV=development bundle exec bin/delayed_job stop
-	RAILS_ENV=development bundle exec bin/delayed_job start
+	RAILS_ENV=production bundle exec bin/delayed_job stop
+	RAILS_ENV=production bundle exec bin/delayed_job start
 ```
 
 ## Manage the application status
 The system is expected to run automatically, you can follow the status of the jobs by visiting the following link
 
-  ``` http://server-name/admin/overview ```
+  ``` http://discovery-dispatcher-server-name/admin/overview ```
 
 
+## Operation
 
+### To add a new indexing service
+* Go to ```config/targets/[environment].yml``` and add the new indexing service url
 
+### To update the targets list
+* If one of the registered indexing service supports a new target name, you will need to restart the discovery-dispatcher app.
+* Go to ```http://discovery-dispatcher-server-name/about/version``` to ensure the new target has been assigned.
+
+### To change the purl-fetcher url
+* Go to the ```config/environments/[environment].rb``` and modify ```config.purl_fetcher_url``` value.
+* Restart the server
+
+## To restart the application
+
+```	
+	touch tmp/restart.txt
+	RAILS_ENV=production bundle exec bin/delayed_job stop
+	RAILS_ENV=production bundle exec bin/delayed_job start
+```
