@@ -37,7 +37,7 @@ bundle exec rspec spec
 Should be run automatically via Travis-CI
 
 ## Cronjob
-The dispatcher depends on a cron job that is scheduled to run every 15 minutes. You can change the schedule from ```config/schedule.rb```. The cronjob is calling "DiscoveryDispatcher.Monitor.run" to read the updates from purl fetcher server.
+The dispatcher depends on a cron job that is scheduled to run every 15 minutes. You can change the schedule from ```config/schedule.rb```. The cronjob is calling "DiscoveryDispatcher.Monitor.run" to read the updates from purl fetcher server. The cronjob logs its activities on ```log/query_purl_fetcher.log```
 
 ## DelayedJob
 The dispatcher is using delayed_job as to enequque the upcoming feeds from the purl fetcher. The delayed job process is restarted automatically within each deployment. To restart the delayed_job process manaually, you need to run the following command from the release_directory
