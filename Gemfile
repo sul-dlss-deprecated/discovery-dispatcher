@@ -13,6 +13,12 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 gem 'coveralls', require: false
 
+# Use Squash for exception reporting
+gem 'squash_ruby', require: 'squash/ruby'
+
+# Pinned to 1.3.3 until https://github.com/SquareSquash/rails/pull/15
+gem 'squash_rails', '1.3.3', require: 'squash/rails'
+
 # Application specific gems
 gem 'delayed_job_active_record'
 gem 'rest-client'
