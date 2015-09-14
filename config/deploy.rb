@@ -1,26 +1,11 @@
-# config valid only for current version of Capistrano
-set :rvm_ruby_string, 'ruby-2.1.4'
-
 set :application, 'discovery-dispatcher'
 set :repo_url, 'https://github.com/sul-dlss/discovery-dispatcher.git'
+set :user, ask("User", 'enter in the app username')
 
-# Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+set :home_directory, "/opt/app/#{fetch(:user)}"
+set :deploy_to, "#{fetch(:home_directory)}/#{fetch(:application)}"
 
-# Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/opt/app/lyberadmin/discovery-dispatcher'
-
-# Default value for :scm is :git
-# set :scm, :git
-
-# Default value for :format is :pretty
-# set :format, :pretty
-
-# Default value for :log_level is :debug
-# set :log_level, :debug
-
-# Default value for :pty is false
-# set :pty, true
+set :stages, %W(staging development production)
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push('config/database.yml')
@@ -28,36 +13,34 @@ set :linked_files, fetch(:linked_files, []).push('config/database.yml')
 # Default value for linked_dirs is []
 set :linked_dirs, %w{bin log config/environments config/targets vendor/bundle public/system tmp/pids}
 
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :branch, 'master'
 
-# Default value for keep_releases is 5
-# set :keep_releases, 5
-
-set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
-
+set :deploy_host, ask("Server", 'enter in the server you are deploying to. do not include .stanford.edu')
+#set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+server "#{fetch(:deploy_host)}.stanford.edu", user: fetch(:user), roles: %w{web db app}
 namespace :deploy do
-  
-  
- 
-  
+
+
+
+
   task :start do
     bundle exec cap setup
   end
-  
+
   task "assets:precompile" do
-    
+
   end
-  
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
+      execute :mkdir, '-p', "#{release_path}/tmp"
       execute :touch, release_path.join('tmp/restart.txt')
       invoke 'delayed_job:restart'
     end
   end
-  
+
   after :publishing, "deploy:migrate"
   after "deploy:migrate", :restart
 
@@ -69,7 +52,6 @@ namespace :deploy do
       # end
     end
   end
-  
-  
-end
 
+
+end
