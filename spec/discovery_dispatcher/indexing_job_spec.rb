@@ -78,13 +78,13 @@ describe DiscoveryDispatcher::IndexingJob do
     it "returns a request command based on the valid input and post method " do
       index_job = DiscoveryDispatcher::IndexingJob.new
       actual_command = index_job.build_request_command("ab123cd4567","post","http://target")
-      expect(actual_command).to eq('RestClient.post "http://target/items/ab123cd4567?subtargets[]=default", ""')
+      expect(actual_command).to eq('RestClient.post "http://target/items/ab123cd4567?subtargets%5B%5D=default", ""')
     end
 
     it "returns a request command based on the valid input and delete method " do
       index_job = DiscoveryDispatcher::IndexingJob.new
       actual_command = index_job.build_request_command("ab123cd4567","delete","http://target")
-      expect(actual_command).to eq('RestClient.delete "http://target/items/ab123cd4567?subtargets[]=default"')
+      expect(actual_command).to eq('RestClient.delete "http://target/items/ab123cd4567?subtargets%5B%5D=default"')
     end
 
   end

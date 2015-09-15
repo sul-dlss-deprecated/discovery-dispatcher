@@ -22,9 +22,11 @@ module DiscoveryDispatcher
     # @param druid [String] represents the druid on the form of ab123cd4567
     # @param method [String] it may be post or delete
     # @param target_url [String] the url for the indexing service
+    # @param subtargets [Array] subtargets for solr core
     # @return [String] RestClient request command
-    def build_request_command(druid, method, target_url)
-      request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}?subtargets[]=default\""
+    def build_request_command(druid, method, target_url, subtargets = ['default'])
+      subtargets = Array(subtargets)
+      request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}?#{subtargets.to_query('subtargets')}\""
       request_command = "#{request_command}, \"\"" if method == "post"
       return request_command
     end
