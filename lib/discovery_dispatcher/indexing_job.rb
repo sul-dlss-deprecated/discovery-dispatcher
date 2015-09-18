@@ -1,14 +1,12 @@
 module DiscoveryDispatcher
-
   # IndexingJob represents a single job managed by Delayed_job
   # @example Enqueue a job into Delayed job queue
   #  Delayed::Job.enqueue(IndexingJob.new(record[:type], record[:druid], target ))
   #
   class IndexingJob < Struct.new(:type, :druid_id, :target)
-
     def perform
       Rails.logger.debug "Processing #{druid_id} for target #{target}"
-      druid = druid_id.gsub("druid:","")
+      druid = druid_id.gsub('druid:', '')
       target_url  = get_target_url target, druid
       method      = get_method type, druid
 
@@ -27,8 +25,8 @@ module DiscoveryDispatcher
     def build_request_command(druid, method, target_url, subtargets = ['default'])
       subtargets = Array(subtargets)
       request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}?#{subtargets.to_query('subtargets')}\""
-      request_command = "#{request_command}, \"\"" if method == "post"
-      return request_command
+      request_command = "#{request_command}, \"\"" if method == 'post'
+      request_command
     end
 
     # It runs the request command
@@ -44,31 +42,30 @@ module DiscoveryDispatcher
       end
 
       # The request doesn't raise an exception but it doesn't return data
-      raise "#{type} #{druid} with #{request_command} has an error." if response.nil?
+      fail "#{type} #{druid} with #{request_command} has an error." if response.nil?
 
       # The request return with anything other than 200, so it is a problem
-      raise "#{type} #{druid} with #{request_command} has an error.\n#{response.code}\n\n#{response.inspect}" if response.code != 200
+      fail "#{type} #{druid} with #{request_command} has an error.\n#{response.code}\n\n#{response.inspect}" if response.code != 200
     end
 
     # It gets the indexing service url based on the target name
-    def get_target_url(target,druid)
+    def get_target_url(target, druid)
       target_urls_hash = Rails.configuration.targets_url_hash
-      if target_urls_hash.include?(target) then
-        return target_urls_hash[target]["url"]
+      if target_urls_hash.include?(target)
+        return target_urls_hash[target]['url']
       else
-        raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
+        fail "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
       end
     end
 
     def get_method(type, druid)
-      if type == "index" then
-        return "post"
-      elsif type == "delete" then
-        return "delete"
+      if type == 'index'
+        return 'post'
+      elsif type == 'delete'
+        return 'delete'
       else
-        raise "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
+        fail "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
       end
     end
-
   end
 end
