@@ -5,19 +5,19 @@ describe DiscoveryDispatcher::PurlFetcherReader do
     pending
   end
 
-  describe '.read_index_list' do
+  describe '.read_change_list' do
     it 'should return a JSON formatted hash' do
       reader = DiscoveryDispatcher::PurlFetcherReader.new('', '')
-      index_page = '{"changes":[{"druid":"druid:bb298yx8728","latest_change":"2015-07-03T01:00:57.046Z","true_targets":["revs_stage"],"false_targets":["Atago","Robot_testing_feb_5_2015"]}, {"druid":"druid:bx498hg0161","latest_change":"2015-09-01T17:00:11.869Z","true_targets":["SearchWorks","sw_stage"],"false_targets":["Sw-stage"]}]}'
-      allow(RestClient).to receive(:get).and_return(index_page)
-      expect(reader.read_index_list).to eq(JSON.parse(index_page))
+      change_page = '{"changes":[{"druid":"druid:bb298yx8728","latest_change":"2015-07-03T01:00:57.046Z","true_targets":["revs_stage"],"false_targets":["Atago","Robot_testing_feb_5_2015"]}, {"druid":"druid:bx498hg0161","latest_change":"2015-09-01T17:00:11.869Z","true_targets":["SearchWorks","sw_stage"],"false_targets":["Sw-stage"]}]}'
+      allow(RestClient).to receive(:get).and_return(change_page)
+      expect(reader.read_change_list).to eq(JSON.parse(change_page))
     end
 
     it 'should return an empty hash when no changes returned from purl-fetcher' do
       reader = DiscoveryDispatcher::PurlFetcherReader.new('', '')
-      index_page = ''
-      allow(RestClient).to receive(:get).and_return(index_page)
-      expect(reader.read_index_list).to eq({})
+      change_page = ''
+      allow(RestClient).to receive(:get).and_return(change_page)
+      expect(reader.read_change_list).to eq({})
     end
   end
 

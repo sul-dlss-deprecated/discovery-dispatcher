@@ -14,7 +14,7 @@ module DiscoveryDispatcher
     # @return a list of records sorted by last modified time
     def load_records
       begin
-        index_records = read_index_list
+        change_records = read_change_list
       rescue => e
         message = "#{e.message}\n"
         e.backtrace.each { |l| message = "#{message}#{l}\n" }
@@ -28,14 +28,14 @@ module DiscoveryDispatcher
         e.backtrace.each { |l| message = "#{message}#{l}\n" }
         raise DiscoveryDispatcher::Errors::MissingPurlFetcherDeletePage.new(message)
       end
-      all_records = merge_and_sort(index_records, delete_records)
+      all_records = merge_and_sort(change_records, delete_records)
     end
 
-    # @return [Hash] a hash of the indexed items between the start and end times, or {} if there are no records
-    def read_index_list
-      index_page =  RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
-      if index_page.present?
-        return JSON.parse(index_page)
+    # @return [Hash] a hash of the changed items between the start and end times, or {} if there are no records
+    def read_change_list
+      change_page =  RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
+      if change_page.present?
+        return JSON.parse(change_page)
       else
         return {}
       end
@@ -51,20 +51,20 @@ module DiscoveryDispatcher
       end
     end
 
-    # It merges both indexed and deleted records in one list, and sorts the new list by last_modified time
+    # It merges both changed and deleted records in one list, and sorts the new list by last_modified time
     # @return [Array] a list of sorted/merged indexed and deleted records.
-    def merge_and_sort(index_records, delete_records)
+    def merge_and_sort(change_records, delete_records)
       all_records_list = []
-      if index_records && index_records['changes']
-        index_records['changes'].each do |index_record|
-          if index_record['true_targets']
-            index_record['true_targets'].each do |target|
-              all_records_list.push(druid: index_record['druid'], latest_change: index_record['latest_change'], target: target, type: 'index')
+      if change_records && change_records['changes']
+        change_records['changes'].each do |change_record|
+          if change_record['true_targets']
+            change_record['true_targets'].each do |target|
+              all_records_list.push(druid: change_record['druid'], latest_change: change_record['latest_change'], target: target, type: 'index')
             end
           end
-          if index_record['false_targets']
-            index_record['false_targets'].each do |target|
-              all_records_list.push(druid: index_record['druid'], latest_change: index_record['latest_change'], target: target, type: 'delete')
+          if change_record['false_targets']
+            change_record['false_targets'].each do |target|
+              all_records_list.push(druid: change_record['druid'], latest_change: change_record['latest_change'], target: target, type: 'delete')
             end
           end
         end
