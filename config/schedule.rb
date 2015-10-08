@@ -16,9 +16,9 @@
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
 # end
-#set :output, "/opt/app/lyberadmin/discovery-dispatcher/current/log/query_purl_fetcher.log"
+# set :output, "/opt/app/lyberadmin/discovery-dispatcher/current/log/query_purl_fetcher.log"
 
 # Learn more: http://github.com/javan/whenever
 every 15.minutes do
-  rake "discovery_dispatcher:query_purl_fetcher"
+  rake 'discovery_dispatcher:query_purl_fetcher'
 end

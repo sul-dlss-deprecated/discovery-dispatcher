@@ -15,16 +15,15 @@ module DiscoveryDispatcher
       # Iterate through the registered target in the target_url config
       target_urls_hash = Rails.configuration.targets_url_hash
       target_urls_hash.keys.each do |target|
-        Delayed::Job.enqueue(IndexingJob.new(record[:type], record[:druid], target))
+        Delayed::Job.enqueue(indexing_job(record, target))
       end
     end
 
     def self.enqueue_index_record(record)
       uniq_targets = merge_and_uniq_targets record[:true_targets], record[:false_targets]
-
       # Iterate through thre target list in the purl fetcher record
       uniq_targets.each do |target|
-        Delayed::Job.enqueue(IndexingJob.new(record[:type], record[:druid], target))
+        Delayed::Job.enqueue(indexing_job(record, target))
       end
     end
 
@@ -37,7 +36,6 @@ module DiscoveryDispatcher
       all_targets.each do |target|
         target_url = get_target_url target
         if target_url.nil? || uniq_targets_hash.values.include?(target_url) == false
-
           uniq_targets_hash[target] = target_url
         end
       end
@@ -47,6 +45,10 @@ module DiscoveryDispatcher
     def self.get_target_url(target)
       target_urls_hash = Rails.configuration.targets_url_hash
       target_urls_hash.include?(target) ? target_urls_hash[target]['url'] : nil
+    end
+
+    def self.indexing_job(record, target)
+      IndexingJob.new(record[:type], record[:druid], target)
     end
   end
 end
