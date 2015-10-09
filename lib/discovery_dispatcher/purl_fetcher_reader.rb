@@ -71,7 +71,7 @@ module DiscoveryDispatcher
       end
       if delete_records && delete_records['deletes']
         delete_records['deletes'].each do |delete_record|
-          all_records_list.push(druid: delete_record['druid'], latest_change: delete_record['latest_change'], type: 'delete')
+          all_records_list.push(druid: delete_record['druid'], latest_change: delete_record['latest_change'], type: 'delete_from_all')
         end
       end
 
