@@ -46,9 +46,9 @@ describe DiscoveryDispatcher::PurlFetcherReader do
       merged_hash = reader.merge_and_sort(JSON.parse(index_hash), JSON.parse(delete_hash))
 
       expect(merged_hash.length).to eq(6)
-      expect(merged_hash[0]).to eq(druid: 'druid:bb111bb1111', latest_change: '2014-12-10T21:03:32Z', type: 'delete')
+      expect(merged_hash[0]).to eq(druid: 'druid:bb111bb1111', latest_change: '2014-12-10T21:03:32Z', type: 'delete_from_all')
       expect(merged_hash[1]).to eq(druid: 'druid:bb111bb1111', latest_change: '2014-12-15T10:03:32Z', target: 'Revs', type: 'index')
-      expect(merged_hash[2]).to eq(druid: 'druid:aa111aa1111', latest_change: '2014-12-15T21:03:32Z', type: 'delete')
+      expect(merged_hash[2]).to eq(druid: 'druid:aa111aa1111', latest_change: '2014-12-15T21:03:32Z', type: 'delete_from_all')
       expect(merged_hash[3]).to eq(druid: 'druid:aa111aa1111', latest_change: '2014-12-20T21:03:32Z', target: 'Sw_stage', type: 'delete')
       expect(merged_hash[4]).to eq(druid: 'druid:aa111aa1111', latest_change: '2014-12-20T21:03:32Z', target: 'Revs', type: 'index')
       expect(merged_hash[5]).to eq(druid: 'druid:aa111aa1111', latest_change: '2014-12-20T21:03:32Z', target: 'Searchwork', type: 'index')
@@ -76,8 +76,8 @@ describe DiscoveryDispatcher::PurlFetcherReader do
       reader = DiscoveryDispatcher::PurlFetcherReader.new('', '')
       merged_hash = reader.merge_and_sort({}, JSON.parse(delete_hash))
       expect(merged_hash.length).to eq(2)
-      expect(merged_hash[0]).to eq(druid: 'druid:bb111bb1111', latest_change: '2014-12-10T21:03:32Z', type: 'delete')
-      expect(merged_hash[1]).to eq(druid: 'druid:aa111aa1111', latest_change: '2014-12-15T21:03:32Z', type: 'delete')
+      expect(merged_hash[0]).to eq(druid: 'druid:bb111bb1111', latest_change: '2014-12-10T21:03:32Z', type: 'delete_from_all')
+      expect(merged_hash[1]).to eq(druid: 'druid:aa111aa1111', latest_change: '2014-12-15T21:03:32Z', type: 'delete_from_all')
     end
   end
 end
