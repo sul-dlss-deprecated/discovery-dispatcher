@@ -4,12 +4,12 @@ require 'capistrano/setup'
 # Includes default deployment tasks
 require 'capistrano/deploy'
 require 'dlss/capistrano'
-require "whenever/capistrano"
+require 'whenever/capistrano'
 require 'capistrano/passenger'
 
 require 'capistrano/bundler'
 require 'capistrano/rails'
-#load 'deploy/assets'
+# load 'deploy/assets'
 
 require 'squash/rails/capistrano3'
 
