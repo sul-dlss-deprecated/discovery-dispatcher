@@ -1,99 +1,67 @@
 describe DiscoveryDispatcher::IndexingJobManager do
+  before :each do
+    Delayed::Job.delete_all
+  end
+  after :each do
+    Delayed::Job.delete_all
+  end
   describe '.enqueue_records' do
-    pending
+    it 'calls enqueue_delete_record_from_all_targets for record[:type] = delete && record[:target] nil' do
+      records = { type: 'delete', druid: 'ab123cd4567' }, { type: 'delete', druid: 'cd123ef4567' }
+      expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_delete_record_from_all_targets).with(records.first)
+      expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_delete_record_from_all_targets).with(records.last)
+      expect(DiscoveryDispatcher::IndexingJobManager).to_not receive(:enqueue_process_record)
+      DiscoveryDispatcher::IndexingJobManager.enqueue_records records
+    end
+    it 'calls enqueue_process_record for record[:type] = delete && record[:target] not nil' do
+      records = { type: 'index', druid: 'cd123ef4567', target: 'Searchworks' }, { type: 'delete', druid: 'cd123ef4567', target: 'Revs' }
+      expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_process_record).with(records.first)
+      expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_process_record).with(records.last)
+      expect(DiscoveryDispatcher::IndexingJobManager).to_not receive(:enqueue_delete_record_from_all_targets)
+      DiscoveryDispatcher::IndexingJobManager.enqueue_records records
+    end
+    it 'calls enqueue_process_record for record[:type] not delete && record[:target] not nil' do
+      records = { type: 'index', druid: 'gh123ij4567', target: 'Revs' }, { type: 'delete', druid: 'cd123ef4567', target: 'Searchworks' }
+      expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_process_record).with(records.first)
+      expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_process_record).with(records.last)
+      expect(DiscoveryDispatcher::IndexingJobManager).to_not receive(:enqueue_delete_record_from_all_targets)
+      DiscoveryDispatcher::IndexingJobManager.enqueue_records records
+    end
+    it 'does not process index records with empty targets' do
+      records = { type: 'index', druid: 'ab123cd4567' }, { type: 'index', druid: 'cd123ef4567' }
+      DiscoveryDispatcher::IndexingJobManager.enqueue_records records
+      expect(Delayed::Job.all.size).to eq(0)
+    end
   end
 
-  describe '.enqueue_delete_record' do
-    before :each do
-      Delayed::Job.delete_all
-    end
-
+  describe '.enqueue_delete_record_from_all_targets' do
     it 'enqueues the record with all available targets' do
-      Delayed::Job.delete_all
       record = {}
       record[:type] = 'delete'
       record[:druid] = 'ab123cd4567'
       Rails.configuration.targets_url_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
-      DiscoveryDispatcher::IndexingJobManager.enqueue_delete_record record
-    end
-
-    after :each do
-      Delayed::Job.delete_all
-    end
-  end
-
-  describe '.enqueue_index_record' do
-    before :each do
-      Delayed::Job.delete_all
-    end
-    it "doesn't index any record for record with empty targets" do
-      Delayed::Job.delete_all
-      record = {}
-      record[:true_targets] = []
-      record[:false_targets] = []
-      DiscoveryDispatcher::IndexingJobManager.enqueue_index_record record
-      expect(Delayed::Job.all.size).to eq(0)
-    end
-    it 'enqueues one job for record with 1 target' do
-      Delayed::Job.delete_all
-      record = {}
-      record[:type] = 'index'
-      record[:druid] = 'ab123cd4567'
-      record[:true_targets] = ['target1']
-      record[:false_targets] = []
-      DiscoveryDispatcher::IndexingJobManager.enqueue_index_record record
-      expect(Delayed::Job.all.size).to eq(1)
-      expect(Delayed::Job.last.handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: index\ndruid_id: ab123cd4567\ntarget: target1\n")
-    end
-    it 'enques two jobs for record with 2 target' do
-      Delayed::Job.delete_all
-      record = {}
-      record[:type] = 'index'
-      record[:druid] = 'ab123cd4567'
-      record[:true_targets] = ['target1']
-      record[:false_targets] = ['target2']
-      DiscoveryDispatcher::IndexingJobManager.enqueue_index_record record
-      expect(Delayed::Job.all.size).to eq(2)
-
+      DiscoveryDispatcher::IndexingJobManager.enqueue_delete_record_from_all_targets record
       last_id = Delayed::Job.last.id
-      expect(Delayed::Job.find(last_id - 1).handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: index\ndruid_id: ab123cd4567\ntarget: target1\n")
-      expect(Delayed::Job.find(last_id).handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: index\ndruid_id: ab123cd4567\ntarget: target2\n")
-    end
-
-    after :each do
-      Delayed::Job.delete_all
+      expect(Delayed::Job.find(last_id - 1).handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: delete\ndruid_id: ab123cd4567\ntarget: t_target1\n")
+      expect(Delayed::Job.find(last_id).handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: delete\ndruid_id: ab123cd4567\ntarget: t_target2\n")
+      expect(Delayed::Job.all.size).to eq(2)
     end
   end
 
-  describe '.get_target_url' do
-    pending
-  end
-
-  describe '.merge_and_uniq_targets' do
-    it 'returns empty list for empty or nil inputs' do
-      expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets([], [])).to eq([])
-      expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(nil, [])).to eq([])
-      expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(nil, nil)).to eq([])
-      expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets([], nil)).to eq([])
-    end
-
-    it 'returns true list with false targets is empty' do
+  describe '.enqueue_process_record' do
+    it 'enqueues a record for index for specified target' do
+      record = { type: 'index', druid: 'cd123ef4567', target: 't_target1' }
       Rails.configuration.targets_url_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
-      true_targets = %w(t_target1 t_target2)
-      false_targets = []
-      expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(true_targets, false_targets)).to eq(%w(t_target1 t_target2))
+      DiscoveryDispatcher::IndexingJobManager.enqueue_process_record record
+      expect(Delayed::Job.last.handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: index\ndruid_id: cd123ef4567\ntarget: t_target1\n")
+      expect(Delayed::Job.all.size).to eq(1)
     end
-    it 'returns false list with true targets is empty' do
+    it 'enqueues a record for delete for specified target' do
+      record = { type: 'delete', druid: 'cd123ef4567', target: 't_target1' }
       Rails.configuration.targets_url_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
-      false_targets = %w(t_target1 t_target2)
-      true_targets = []
-      expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(true_targets, false_targets)).to eq(%w(t_target1 t_target2))
-    end
-    it 'removes the duplicate targets with the same url' do
-      Rails.configuration.targets_url_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url1' }, 't_target3' => { 'url' => 'url2' } }
-      true_targets = %w(t_target1 t_target2)
-      false_targets = ['t_target3']
-      expect(DiscoveryDispatcher::IndexingJobManager.merge_and_uniq_targets(true_targets, false_targets)).to eq(%w(t_target1 t_target3))
+      DiscoveryDispatcher::IndexingJobManager.enqueue_process_record record
+      expect(Delayed::Job.last.handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: delete\ndruid_id: cd123ef4567\ntarget: t_target1\n")
+      expect(Delayed::Job.all.size).to eq(1)
     end
   end
 end
