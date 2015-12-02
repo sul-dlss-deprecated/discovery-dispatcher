@@ -3,10 +3,9 @@ language: ruby
 rvm:
   - 2.1.4
   - 2.0.0
-  - 1.9.3
 notifications:
   email:
-    - aalsum@stanford.edu
+    - laneymcg@stanford.edu
 before_script:
   - cp config/targets/example.yml config/targets/test.yml
   - cp config/environments/example.rb config/environments/test.rb

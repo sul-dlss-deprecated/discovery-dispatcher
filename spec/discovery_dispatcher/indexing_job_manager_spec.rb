@@ -39,7 +39,7 @@ describe DiscoveryDispatcher::IndexingJobManager do
       record = {}
       record[:type] = 'delete'
       record[:druid] = 'ab123cd4567'
-      Rails.configuration.targets_url_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
+      Rails.configuration.target_urls_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
       DiscoveryDispatcher::IndexingJobManager.enqueue_delete_record_from_all_targets record
       last_id = Delayed::Job.last.id
       expect(Delayed::Job.find(last_id - 1).handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: delete\ndruid_id: ab123cd4567\ntarget: t_target1\n")
@@ -51,14 +51,14 @@ describe DiscoveryDispatcher::IndexingJobManager do
   describe '.enqueue_process_record' do
     it 'enqueues a record for index for specified target' do
       record = { type: 'index', druid: 'cd123ef4567', target: 't_target1' }
-      Rails.configuration.targets_url_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
+      Rails.configuration.target_urls_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
       DiscoveryDispatcher::IndexingJobManager.enqueue_process_record record
       expect(Delayed::Job.last.handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: index\ndruid_id: cd123ef4567\ntarget: t_target1\n")
       expect(Delayed::Job.all.size).to eq(1)
     end
     it 'enqueues a record for delete for specified target' do
       record = { type: 'delete', druid: 'cd123ef4567', target: 't_target1' }
-      Rails.configuration.targets_url_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
+      Rails.configuration.target_urls_hash = { 't_target1' => { 'url' => 'url1' }, 't_target2' => { 'url' => 'url2' } }
       DiscoveryDispatcher::IndexingJobManager.enqueue_process_record record
       expect(Delayed::Job.last.handler).to eq("--- !ruby/struct:DiscoveryDispatcher::IndexingJob\ntype: delete\ndruid_id: cd123ef4567\ntarget: t_target1\n")
       expect(Delayed::Job.all.size).to eq(1)

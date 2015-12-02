@@ -17,8 +17,8 @@ module DiscoveryDispatcher
     # record type is delete but there are no specified targets
     def self.enqueue_delete_record_from_all_targets(record)
       # Iterate through the registered targets in the target_url config
-      target_urls_hash = Rails.configuration.targets_url_hash
-      target_urls_hash.keys.each do |target|
+      target_hash = Rails.configuration.target_urls_hash
+      target_hash.keys.each do |target|
         Delayed::Job.enqueue(IndexingJob.new(record[:type], record[:druid], target))
       end
     end
