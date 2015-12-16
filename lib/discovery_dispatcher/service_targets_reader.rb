@@ -7,9 +7,8 @@ module DiscoveryDispatcher
   class ServiceTargetsReader
     include Singleton
 
-    def read_service_targets
-      services_uris = read_services_uris_file
-      download_services_list(services_uris)
+    def targets_urls
+      parse_service_json(read_services_uris_file)
     end
 
     # @return a list of the services uris defined in config/targets/[RAILS_ENV].yml
@@ -17,24 +16,24 @@ module DiscoveryDispatcher
       YAML.load(File.new(Rails.root.join('config', 'targets', "#{Rails.env}.yml").to_s))
     end
 
-    def download_services_list(services_uris)
-      services_urls = {}
+    def parse_service_json(services_uris)
+      targets_urls = {}
       unless services_uris
         Rails.logger.warn 'Service uris file is empty.'
-        return services_urls
+        return targets_urls
       end
       services_uris.each do |uri|
         begin
           response = RestClient.get "#{uri}/about/version.json"
-          service_names = JSON.parse(response)['solr_cores'].keys
-          service_names.each do |service_name|
-            services_urls[service_name] = { 'url' => uri }
+          solr_cores = JSON.parse(response)['solr_cores'].keys
+          solr_cores.each do |solr_core|
+            targets_urls[solr_core] = { 'url' => uri }
           end
         rescue => e
           Rails.logger.error "Problem in reading the solr cores from #{uri}.\n\n#{e.inspect}\n#{e.message}\n#{e.backtrace}"
         end
       end
-      services_urls
+      targets_urls
     end
   end
 end

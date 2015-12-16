@@ -1,2 +1,4 @@
-- http://system1.example.org
-- http://system2.example.org
+- Searchworks:
+    http://system1.example.org
+- Searchworks:preview:
+    http://system2.example.org

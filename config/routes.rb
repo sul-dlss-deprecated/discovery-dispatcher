@@ -4,6 +4,5 @@ Rails.application.routes.draw do
   get 'about' => 'about#version'
 
   resources :items, only: :new
-  resources :collections, only: :new
   match '/admin' => DelayedJobWeb, :anchor => false, via: [:get, :post]
 end

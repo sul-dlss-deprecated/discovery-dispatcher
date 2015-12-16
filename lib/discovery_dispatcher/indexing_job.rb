@@ -10,7 +10,7 @@ module DiscoveryDispatcher
       target_url  = get_target_url target, druid
       method      = get_method type, druid
 
-      request_command = build_request_command(druid, method, target_url)
+      request_command = build_request_command(druid, method, target_url, target)
       run_request_command(druid, type, request_command)
 
       # Request went successfully
@@ -20,11 +20,11 @@ module DiscoveryDispatcher
     # @param druid [String] represents the druid on the form of ab123cd4567
     # @param method [String] it may be put or delete
     # @param target_url [String] the url for the indexing service
-    # @param subtargets [Array] subtargets for solr core
+    # @param solr_target [Array] solr target for solr core
     # @return [String] RestClient request command
-    def build_request_command(druid, method, target_url, subtargets = ['default'])
-      subtargets = Array(subtargets)
-      request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}?#{subtargets.to_query('subtargets')}\""
+    def build_request_command(druid, method, target_url, solr_target)
+      solr_target = Array(solr_target)
+      request_command = "RestClient.#{method} \"#{target_url}/items/#{druid}?#{solr_target.to_query('solr_target')}\""
       request_command = "#{request_command}, \"\"" if method == 'put'
       request_command
     end
@@ -50,7 +50,7 @@ module DiscoveryDispatcher
 
     # It gets the indexing service url based on the target name
     def get_target_url(target, druid)
-      target_urls_hash = Rails.configuration.targets_url_hash
+      target_urls_hash = Rails.configuration.target_urls_hash
       if target_urls_hash.include?(target)
         return target_urls_hash[target]['url']
       else

@@ -44,7 +44,12 @@ http_interactions:
       - Keep-Alive
     body:
       encoding: UTF-8
-      string: '{"app_name":"Test engine","rails_env":"development","version":"0.0","last_restart":"n/a","last_deploy":"n/a","solr_cores":{"target1":{"url":"http://localhost:8983/solr/","allow_update":false},"target2":{"url":"http://localhost:8983/solr/"}}}'
-    http_version: 
+      string: '{"app_name":"Searchworks-Indexing-Service","rails_env":"production",
+      "version":"0.1","last_restart":"2015-10-28T11:40:48.000-07:00",
+      "last_deploy":"2015-10-28T07:58:27.000-07:00","revision":"8e51028\n",
+      "solr_cores":{"Searchworks":{"url":"http://localhost:8983/solr"},
+      "Searchworks:stage":{"url":"http://localhost:8983/solr/stage"},
+      "Searchworks:preview":{"url":"http://localhost:8983/solr/preview"}}}'
+    http_version:
   recorded_at: Wed, 06 May 2015 18:40:30 GMT
 recorded_with: VCR 2.9.3
