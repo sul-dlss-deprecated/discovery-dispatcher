@@ -34,6 +34,9 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'sqlite3'
   gem 'vcr'
+end
+
+group :test do
   gem 'webmock'
 end
 
