@@ -5,7 +5,7 @@ module DiscoveryDispatcher
   # @example Get the next start time
   #   DiscoveryDispatcher::PurlFetcherManager.PurlFetcherManager
   class PurlFetcherManager
-    PACIFIC_TIME_ZONE = 'Pacific Time (US & Canada)'
+    PACIFIC_TIME_ZONE = 'Pacific Time (US & Canada)'.freeze
 
     # @return the next start time to read the records from purl-fetcher. It's will
     #  be the last reading time - 2 minutes.

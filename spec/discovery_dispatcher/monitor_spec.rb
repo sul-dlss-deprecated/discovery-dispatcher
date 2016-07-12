@@ -10,7 +10,7 @@ describe DiscoveryDispatcher::Monitor do
         .and_return(purlfetch)
       expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_records).with(records)
       expect(DiscoveryDispatcher::PurlFetcherManager).to receive(:set_last_fetch_info).with('2014-01-01T12:00:00 -0800', records.length)
-      DiscoveryDispatcher::Monitor.run
+      described_class.run
     end
     it 'raises an error when start time is nil' do
       expect(DiscoveryDispatcher::PurlFetcherManager).to receive(:get_next_start_time).and_return(nil)
@@ -19,7 +19,7 @@ describe DiscoveryDispatcher::Monitor do
         .with(nil, nil).and_return(purlfetch)
       expect(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_records).with(records)
       expect(DiscoveryDispatcher::PurlFetcherManager).to receive(:set_last_fetch_info).with(nil, 0)
-      DiscoveryDispatcher::Monitor.run
+      described_class.run
     end
     xit 'raises an error when end time is nil' do
       pending

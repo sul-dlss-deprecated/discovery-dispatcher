@@ -42,10 +42,10 @@ module DiscoveryDispatcher
       end
 
       # The request doesn't raise an exception but it doesn't return data
-      fail "#{type} #{druid} with #{request_command} has an error." if response.nil?
+      raise "#{type} #{druid} with #{request_command} has an error." if response.nil?
 
       # The request return with anything other than 200, so it is a problem
-      fail "#{type} #{druid} with #{request_command} has an error.\n#{response.code}\n\n#{response.inspect}" if response.code != 200
+      raise "#{type} #{druid} with #{request_command} has an error.\n#{response.code}\n\n#{response.inspect}" if response.code != 200
     end
 
     # It gets the indexing service url based on the target name
@@ -54,7 +54,7 @@ module DiscoveryDispatcher
       if target_urls_hash.include?(target)
         return target_urls_hash[target]['url']
       else
-        fail "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
+        raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
       end
     end
 
@@ -64,7 +64,7 @@ module DiscoveryDispatcher
       elsif type == 'delete'
         return 'delete'
       else
-        fail "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
+        raise "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
       end
     end
   end

@@ -33,7 +33,7 @@ module DiscoveryDispatcher
 
     # @return [Hash] a hash of the changed items between the start and end times, or {} if there are no records
     def read_change_list
-      change_page =  RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
+      change_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
       if change_page.present?
         return JSON.parse(change_page)
       else
@@ -43,7 +43,7 @@ module DiscoveryDispatcher
 
     # @return [Hash] a hash of the deleted items between the start and end times, or {} if there are no records
     def read_delete_list
-      delete_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/deletes", {:params => {:first_modified => @start_time, :last_modified => @end_time, :content_type => :json, :accept => :json}}
+      delete_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/deletes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
       if delete_page.present?
         return JSON.parse(delete_page)
       else
@@ -62,10 +62,9 @@ module DiscoveryDispatcher
               all_records_list.push(druid: change_record['druid'], latest_change: change_record['latest_change'], target: target, type: 'index')
             end
           end
-          if change_record['false_targets']
-            change_record['false_targets'].each do |target|
-              all_records_list.push(druid: change_record['druid'], latest_change: change_record['latest_change'], target: target, type: 'delete')
-            end
+          next unless change_record['false_targets']
+          change_record['false_targets'].each do |target|
+            all_records_list.push(druid: change_record['druid'], latest_change: change_record['latest_change'], target: target, type: 'delete')
           end
         end
       end
