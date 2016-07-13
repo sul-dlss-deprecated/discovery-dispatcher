@@ -5,6 +5,14 @@
 
 This application is responsible for routing the indexing requests for the modified purl public xml objects to the designated indexing services.
 
+## First Time App Setup
+
+```
+rake config
+rake db:migrate
+RAILS_ENV=test rake db:migrate
+```
+
 ## Deployment
 
 ```
@@ -13,7 +21,7 @@ This application is responsible for routing the indexing requests for the modifi
 	cap [environment] deploy
 ```
 
-Note: ```config/deploy/example.rb``` has an example of the expected enviroment, the actual values can be found on the configuration control.
+Note: ```config/deploy/example.rb``` has an example of the expected environment, the actual values can be found on the configuration control.
 
 ## Configuration
 The application depends on the following configuration files:
@@ -31,10 +39,10 @@ It has a list of the indexing services that the dispatcher need to forward the r
 ## Running tests
 
 ```
-bundle exec rspec spec
+rake
 ```
 
-Should be run automatically via Travis-CI
+Is also run automatically via Travis-CI
 
 ## Cronjob
 The dispatcher depends on a cron job that is scheduled to run every 15 minutes. You can change the schedule from ```config/schedule.rb```. The cronjob is calling "DiscoveryDispatcher.Monitor.run" to read the updates from purl fetcher server. The cronjob logs its activities on ```log/query_purl_fetcher.log```
@@ -42,7 +50,7 @@ The dispatcher depends on a cron job that is scheduled to run every 15 minutes. 
 ## DelayedJob
 The dispatcher is using delayed_job as to enequque the upcoming feeds from the purl fetcher. The delayed job process is restarted automatically within each deployment. To restart the delayed_job process manaually, you need to run the following command from the release_directory
 
-```	
+```
 	RAILS_ENV=production bundle exec bin/delayed_job stop
 	RAILS_ENV=production bundle exec bin/delayed_job start
 ```
@@ -68,7 +76,7 @@ The system is expected to run automatically, you can follow the status of the jo
 
 ## To restart the application
 
-```	
+```
 	touch tmp/restart.txt
 	RAILS_ENV=production bundle exec bin/delayed_job stop
 	RAILS_ENV=production bundle exec bin/delayed_job start
