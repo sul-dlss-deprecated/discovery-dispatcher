@@ -4,8 +4,10 @@ describe DiscoveryDispatcher::IndexingJob do
       VCR.use_cassette('index_xz404nk7341') do
         index_job = described_class.new('index', 'xz404nk7341', 'target1')
         Rails.configuration.target_urls_hash = { 'target1' => { 'url' => 'http://localhost:3000' } }
-        expect_any_instance_of(described_class).to receive('build_request_command').with('xz404nk7341', 'put', 'http://localhost:3000', 'target1').and_return('RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
-        expect_any_instance_of(described_class).to receive('run_request_command').with('xz404nk7341', 'index', 'RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
+        expect(index_job).to receive('build_request_command').with('xz404nk7341', 'put',
+                                                           'http://localhost:3000', 'target1').and_return('RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
+        expect(index_job).to receive('run_request_command').with('xz404nk7341', 'index',
+                                                           'RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
         index_job.perform
       end
     end

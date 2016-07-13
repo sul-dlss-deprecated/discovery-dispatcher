@@ -10,21 +10,21 @@ describe DiscoveryDispatcher::IndexingJobManager do
       records = { type: 'delete', druid: 'ab123cd4567' }, { type: 'delete', druid: 'cd123ef4567' }
       expect(described_class).to receive(:enqueue_delete_record_from_all_targets).with(records.first)
       expect(described_class).to receive(:enqueue_delete_record_from_all_targets).with(records.last)
-      expect(described_class).to_not receive(:enqueue_process_record)
+      expect(described_class).not_to receive(:enqueue_process_record)
       described_class.enqueue_records records
     end
     it 'calls enqueue_process_record for record[:type] = delete && record[:target] not nil' do
       records = { type: 'index', druid: 'cd123ef4567', target: 'Searchworks' }, { type: 'delete', druid: 'cd123ef4567', target: 'Revs' }
       expect(described_class).to receive(:enqueue_process_record).with(records.first)
       expect(described_class).to receive(:enqueue_process_record).with(records.last)
-      expect(described_class).to_not receive(:enqueue_delete_record_from_all_targets)
+      expect(described_class).not_to receive(:enqueue_delete_record_from_all_targets)
       described_class.enqueue_records records
     end
     it 'calls enqueue_process_record for record[:type] not delete && record[:target] not nil' do
       records = { type: 'index', druid: 'gh123ij4567', target: 'Revs' }, { type: 'delete', druid: 'cd123ef4567', target: 'Searchworks' }
       expect(described_class).to receive(:enqueue_process_record).with(records.first)
       expect(described_class).to receive(:enqueue_process_record).with(records.last)
-      expect(described_class).to_not receive(:enqueue_delete_record_from_all_targets)
+      expect(described_class).not_to receive(:enqueue_delete_record_from_all_targets)
       described_class.enqueue_records records
     end
     it 'does not process index records with empty targets' do

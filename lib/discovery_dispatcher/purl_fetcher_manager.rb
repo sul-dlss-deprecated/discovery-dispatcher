@@ -9,7 +9,7 @@ module DiscoveryDispatcher
 
     # @return the next start time to read the records from purl-fetcher. It's will
     #  be the last reading time - 2 minutes.
-    def self.get_next_start_time
+    def self.next_start_time
       next_start_time = ReaderLogRecords.maximum(:last_read_time)
       next_start_time.nil? ? Time.parse('1970-01-01T12:00:00-08:00').in_time_zone(PACIFIC_TIME_ZONE).iso8601 : (next_start_time - 2.minutes).in_time_zone(PACIFIC_TIME_ZONE).iso8601
     end

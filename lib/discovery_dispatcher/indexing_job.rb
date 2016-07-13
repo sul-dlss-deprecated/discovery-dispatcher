@@ -51,21 +51,14 @@ module DiscoveryDispatcher
     # It gets the indexing service url based on the target name
     def get_target_url(target, druid)
       target_urls_hash = Rails.configuration.target_urls_hash
-      if target_urls_hash.include?(target)
-        return target_urls_hash[target]['url']
-      else
-        raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
-      end
+      return target_urls_hash[target]['url'] if target_urls_hash.include?(target)
+      raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
     end
 
     def get_method(type, druid)
-      if type == 'index'
-        return 'put'
-      elsif type == 'delete'
-        return 'delete'
-      else
-        raise "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
-      end
+      return 'put' if type == 'index'
+      return 'delete' if type == 'delete'
+      raise "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
     end
   end
 end
