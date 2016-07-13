@@ -296,6 +296,7 @@ DEPENDENCIES
   delayed_job_web
   dlss-capistrano
   dlss_cops
+  faraday
   is_it_working-cbeer
   jbuilder
   jquery-rails
