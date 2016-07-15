@@ -238,7 +238,7 @@ purl-fetcher-reader</p>
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
   <span class='kw'>begin</span>
     <span class='comment'># Prepare start and end time
-</span>    <span class='id identifier rubyid_start_time'>start_time</span> <span class='op'>=</span> <span class='const'>DiscoveryDispatcher</span><span class='op'>::</span><span class='const'>PurlFetcherManager</span><span class='period'>.</span><span class='id identifier rubyid_get_next_start_time'>get_next_start_time</span>
+</span>    <span class='id identifier rubyid_start_time'>start_time</span> <span class='op'>=</span> <span class='const'>DiscoveryDispatcher</span><span class='op'>::</span><span class='const'>PurlFetcherManager</span><span class='period'>.</span><span class='id identifier rubyid_next_start_time'>next_start_time</span>
     <span class='id identifier rubyid_end_time'>end_time</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span>
 
     <span class='comment'># Read the records

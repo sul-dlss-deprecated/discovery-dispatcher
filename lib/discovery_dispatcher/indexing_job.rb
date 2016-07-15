@@ -42,30 +42,23 @@ module DiscoveryDispatcher
       end
 
       # The request doesn't raise an exception but it doesn't return data
-      fail "#{type} #{druid} with #{request_command} has an error." if response.nil?
+      raise "#{type} #{druid} with #{request_command} has an error." if response.nil?
 
       # The request return with anything other than 200, so it is a problem
-      fail "#{type} #{druid} with #{request_command} has an error.\n#{response.code}\n\n#{response.inspect}" if response.code != 200
+      raise "#{type} #{druid} with #{request_command} has an error.\n#{response.code}\n\n#{response.inspect}" if response.code != 200
     end
 
     # It gets the indexing service url based on the target name
     def get_target_url(target, druid)
       target_urls_hash = Rails.configuration.target_urls_hash
-      if target_urls_hash.include?(target)
-        return target_urls_hash[target]['url']
-      else
-        fail "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
-      end
+      return target_urls_hash[target]['url'] if target_urls_hash.include?(target)
+      raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
     end
 
     def get_method(type, druid)
-      if type == 'index'
-        return 'put'
-      elsif type == 'delete'
-        return 'delete'
-      else
-        fail "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
-      end
+      return 'put' if type == 'index'
+      return 'delete' if type == 'delete'
+      raise "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
     end
   end
 end

@@ -7,7 +7,7 @@ module DiscoveryDispatcher
     # @raise an error if the method faces any problem in reading from purl-fetcher-reader
     def self.run
       # Prepare start and end time
-      start_time = DiscoveryDispatcher::PurlFetcherManager.get_next_start_time
+      start_time = DiscoveryDispatcher::PurlFetcherManager.next_start_time
       end_time = Time.now
 
       # Read the records
@@ -22,7 +22,7 @@ module DiscoveryDispatcher
       puts e.message
       puts e.backtrace.inspect
       # I think we need to raise_error to
-      #Rails.logger.error { "Purl fetcher reader failed for the query between #{start_time} and #{end_time}\n#{e.message}" }
+      # Rails.logger.error { "Purl fetcher reader failed for the query between #{start_time} and #{end_time}\n#{e.message}" }
     end
   end
 end
