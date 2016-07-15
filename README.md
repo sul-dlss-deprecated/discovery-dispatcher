@@ -16,7 +16,7 @@ RAILS_ENV=test rake db:migrate
 ## Deployment
 
 ```
-	git clone https://github.com/sul-dlss/revs-indexer-service.git
+	git clone https://github.com/sul-dlss/discovery-dispatcher.git
 	bundle install
 	cap [environment] deploy
 ```
@@ -53,6 +53,12 @@ The dispatcher is using delayed_job as to enequque the upcoming feeds from the p
 ```
 	RAILS_ENV=production bundle exec bin/delayed_job stop
 	RAILS_ENV=production bundle exec bin/delayed_job start
+```
+
+## Starting server
+
+```
+rails s
 ```
 
 ## Manage the application status
