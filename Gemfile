@@ -3,12 +3,6 @@ source 'https://rubygems.org'
 gem 'rails'
 gem 'responders'
 gem 'mysql2'
-gem 'sass-rails'
-gem 'uglifier'
-gem 'coffee-rails'
-gem 'therubyracer', platforms: :ruby
-gem 'jquery-rails'
-gem 'turbolinks'
 gem 'jbuilder'
 gem 'sdoc', group: :doc
 gem 'spring', group: :development
