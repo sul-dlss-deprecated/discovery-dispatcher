@@ -4,7 +4,10 @@ inherit_gem:
 # rspec expect{...} is conventional
 Style/SpaceBeforeBlockBraces:
   Exclude:
-    - 'spec/**/*_spec.rb'
+    - 'Gemfile'
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'vendor/**/*'
 
 Style/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
