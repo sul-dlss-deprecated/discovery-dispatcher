@@ -7,6 +7,7 @@ gem 'jbuilder'
 gem 'sdoc', group: :doc
 gem 'spring', group: :development
 gem 'coveralls', require: false
+gem 'faraday'
 
 # Use Squash for exception reporting
 gem 'squash_ruby', require: 'squash/ruby'
