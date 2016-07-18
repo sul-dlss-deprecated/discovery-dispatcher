@@ -27,8 +27,8 @@ end
 
 task default: :ci
 
-desc 'run continuous integration suite (tests, coverage, docs)'
-task ci: [:spec, :doc]
+desc 'run continuous integration suite (tests, coverage)'
+task ci: [:spec]
 
 # Use yard to build docs
 begin
