@@ -18,7 +18,6 @@ gem 'squash_rails', '1.3.3', require: 'squash/rails'
 # Application specific gems
 gem 'delayed_job_active_record'
 gem 'rest-client'
-gem 'yard'
 gem 'daemons'
 gem 'whenever', require: false
 gem 'delayed_job_web'
@@ -30,6 +29,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'vcr'
   gem 'dlss_cops'
+  gem 'yard'
 end
 
 group :test do
