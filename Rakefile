@@ -8,9 +8,6 @@ Rails.application.load_tasks
 require 'rake'
 require 'bundler'
 
-require 'yard'
-require 'yard/rake/yardoc_task'
-
 # Executed by the following command
 # cd /opt/app/lyberadmin/discovery-dispatcher/current && bundle exec rake RAILS_ENV=development discovery_dispatcher:query_purl_fetcher
 namespace :discovery_dispatcher do
@@ -30,18 +27,20 @@ end
 
 task default: :ci
 
-desc 'run continuous integration suite (tests, coverage, docs)'
-task ci: [:spec, :doc]
+desc 'run continuous integration suite (tests, coverage)'
+task ci: [:spec]
 
 # Use yard to build docs
 begin
+  require 'yard'
+  require 'yard/rake/yardoc_task'
+
   project_root = File.expand_path(File.dirname(__FILE__))
   doc_dest_dir = File.join(project_root, 'doc')
 
   YARD::Rake::YardocTask.new(:doc) do |yt|
-    yt.files = Dir.glob(File.join(project_root, 'lib', '**', '*.rb')) +
-               [File.join(project_root, 'README.rdoc')]
-    yt.options = ['--output-dir', doc_dest_dir, '--readme', 'README.rdoc', '--title', 'Discovery Dispatcher Documentation']
+    yt.files = Dir.glob(File.join(project_root, 'lib', '**', '*.rb'))
+    yt.options = ['--output-dir', doc_dest_dir, '--readme', 'README.md', '--title', 'Discovery Dispatcher Documentation']
   end
 rescue LoadError
   desc 'Generate YARD Documentation'
