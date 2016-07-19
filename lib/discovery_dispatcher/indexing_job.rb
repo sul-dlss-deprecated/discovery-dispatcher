@@ -1,3 +1,5 @@
+require 'benchmark'
+
 module DiscoveryDispatcher
   # IndexingJob represents a single job managed by Delayed_job
   # @example Enqueue a job into Delayed job queue
@@ -6,15 +8,16 @@ module DiscoveryDispatcher
   class IndexingJob < Struct.new(:type, :druid_id, :target)
     def perform
       Rails.logger.debug "Processing #{druid_id} for target #{target}"
-      druid = druid_id.gsub('druid:', '')
-      target_url  = get_target_url target, druid
-      method      = get_method type, druid
+      elapsed = Benchmark.realtime do
+        druid = druid_id.gsub('druid:', '')
+        target_url  = get_target_url target, druid
+        method      = get_method type, druid
 
-      url = build_request_url(druid, target_url, target)
-      run_request(druid, type, url)
-
+        url = build_request_url(druid, target_url, target)
+        run_request(druid, type, url)
+      end
       # Request went successfully
-      Rails.logger.debug "Completing #{druid_id} for target #{target}"
+      Rails.logger.info "Completed #{druid_id} for target #{target} of type #{type} in #{sprintf('%0.4f', elapsed)}s"
     end
 
     # @param druid [String] represents the druid on the form of ab123cd4567
