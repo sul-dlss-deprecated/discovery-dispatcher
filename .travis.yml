@@ -7,5 +7,4 @@ notifications:
     - laneymcg@stanford.edu
 before_script:
   - cp config/targets/example.yml config/targets/test.yml
-  - cp config/environments/example.rb config/environments/test.rb
   - "bundle exec rake db:migrate"

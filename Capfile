@@ -6,9 +6,10 @@ require 'capistrano/deploy'
 require 'dlss/capistrano'
 require 'whenever/capistrano'
 require 'capistrano/passenger'
-
+require 'capistrano/delayed_job'
 require 'capistrano/bundler'
-require 'capistrano/rails'
+require 'capistrano/rails/migrations'
+require 'capistrano/rvm'
 # load 'deploy/assets'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.

@@ -65,6 +65,8 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano3-delayed-job (1.7.2)
+      capistrano (~> 3.0, >= 3.0.0)
     chronic (0.10.2)
     concurrent-ruby (1.0.2)
     coveralls (0.8.10)
@@ -259,6 +261,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails
   capistrano-rvm
+  capistrano3-delayed-job
   coveralls
   daemons
   delayed_job_active_record

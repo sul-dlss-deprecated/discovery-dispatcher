@@ -21,4 +21,3 @@
 /.ruby-version
 
 config/targets/*.yml
-config/environments/*.rb
