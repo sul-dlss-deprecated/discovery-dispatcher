@@ -6,6 +6,8 @@ describe DiscoveryDispatcher::IndexingJob do
         Rails.configuration.target_urls_hash = { 'target1' => { 'url' => 'http://localhost:3000' } }
         expect_any_instance_of(DiscoveryDispatcher::IndexingJob).to receive('build_request_url').with('xz404nk7341', 'http://localhost:3000', 'target1').and_return('RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
         expect_any_instance_of(DiscoveryDispatcher::IndexingJob).to receive('run_request').with('xz404nk7341', 'index', 'RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
+        expect(Rails.logger).to receive(:debug).with(/Processing/).and_call_original
+        expect(Rails.logger).to receive(:info).with(/Completed/).and_call_original
         index_job.perform
       end
     end
