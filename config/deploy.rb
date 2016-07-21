@@ -17,12 +17,9 @@ set :linked_dirs, %w{config/environments config/targets bin log tmp/pids tmp/cac
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
-after 'deploy:publishing', 'deploy:restart'
-namespace :deploy do
-  task :restart do
-    invoke 'delayed_job:restart'
-  end
-end
+# server uses standardized suffix
+server "discovery-dispatcher-#{fetch(:stage)}.stanford.edu", user: fetch(:user), roles: %w{web db app}
+set :bundle_without, %w(test deployment development).join(' ')
 
-# set :delayed_job_server_role, :worker
-# set :delayed_job_args, "-n 2"
+# honeybadger_env otherwise defaults to rails_env
+set :honeybadger_env, "#{fetch(:stage)}"
