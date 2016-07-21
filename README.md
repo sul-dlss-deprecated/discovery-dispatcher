@@ -72,7 +72,7 @@ The system is expected to run automatically, you can follow the status of the jo
 * Go to ```http://discovery-dispatcher-server-name/about/version``` to ensure the new target has been assigned.
 
 ### To change the purl-fetcher url
-* Go to the ```config/environments/[environment].rb``` and modify ```config.purl_fetcher_url``` value.
+* Go to the ```config/settings/[environment].rb``` and modify ```PURL_FETCHER_URL``` value.
 * Restart the server
 
 ## To restart the application
