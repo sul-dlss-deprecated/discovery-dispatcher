@@ -24,11 +24,6 @@ RAILS_ENV=test rake db:migrate
 Note: ```config/deploy/example.rb``` has an example of the expected environment, the actual values can be found on the configuration control.
 
 ## Configuration
-The application depends on the following configuration files:
-
-* config/environments/[environment].rb
-
-```config/environments/example.rb``` has an example about the expected fields in the configuration file, the actual values can be found on the configuration control.
 
 * config/targets/[environment].yml
 
