@@ -6,6 +6,7 @@ gem 'rails', '~> 4.2' # specifying because we expect a major version upgrade to 
 gem 'squash_rails', '1.3.3', require: 'squash/rails'
 
 # Application specific gems
+gem 'config'
 gem 'daemons' # TODO: where is this used?
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'

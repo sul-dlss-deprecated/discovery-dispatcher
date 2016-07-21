@@ -69,6 +69,9 @@ GEM
       capistrano (~> 3.0, >= 3.0.0)
     chronic (0.10.2)
     concurrent-ruby (1.0.2)
+    config (1.1.0)
+      activesupport (>= 3.0)
+      deep_merge (~> 1.0.1)
     coveralls (0.8.10)
       json (~> 1.8)
       rest-client (>= 1.6.8, < 2)
@@ -79,6 +82,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     daemons (1.2.3)
+    deep_merge (1.0.1)
     delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
     delayed_job_active_record (4.1.0)
@@ -262,6 +266,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   capistrano3-delayed-job
+  config
   coveralls
   daemons
   delayed_job_active_record
