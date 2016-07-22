@@ -68,7 +68,7 @@ module DiscoveryDispatcher
         end
       end
 
-      all_records_list.sort_by { |item| item[:latest_change] } if all_records_list
+      all_records_list.sort_by { |item| [item[:latest_change], item[:type], item[:target]] } if all_records_list
     end
   end
 end
