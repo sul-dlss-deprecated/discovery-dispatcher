@@ -33,14 +33,14 @@ module DiscoveryDispatcher
 
     # @return [Hash] a hash of the changed items between the start and end times, or {} if there are no records
     def read_change_list
-      change_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/changes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
+      change_page = RestClient.get "#{Settings.PURL_FETCHER_URL}/docs/changes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
       return JSON.parse(change_page) if change_page.present?
       {}
     end
 
     # @return [Hash] a hash of the deleted items between the start and end times, or {} if there are no records
     def read_delete_list
-      delete_page = RestClient.get "#{Rails.configuration.purl_fetcher_url}/docs/deletes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
+      delete_page = RestClient.get "#{Settings.PURL_FETCHER_URL}/docs/deletes", params: { first_modified: @start_time, last_modified: @end_time, content_type: :json, accept: :json }
       return JSON.parse(delete_page) if delete_page.present?
       {}
     end
@@ -68,7 +68,7 @@ module DiscoveryDispatcher
         end
       end
 
-      all_records_list.sort_by { |item| item[:latest_change] } if all_records_list
+      all_records_list.sort_by { |item| [item[:latest_change], item[:type], item[:target]] } if all_records_list
     end
   end
 end
