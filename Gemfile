@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2' # specifying because we expect a major version upgrade to break things
 
-# Pinned to 1.3.3 until https://github.com/SquareSquash/rails/pull/15
-gem 'squash_rails', '1.3.3', require: 'squash/rails'
-
 # Application specific gems
 gem 'config'
 gem 'daemons' # TODO: where is this used?
@@ -17,6 +14,7 @@ gem 'rake' # needed for automation tasks
 gem 'responders' # TODO: where is this used?
 gem 'rest-client'
 gem 'whenever', require: false
+gem 'honeybadger', '~> 2.0'
 
 group :development, :test do
   gem 'dlss_cops'
