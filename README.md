@@ -25,11 +25,7 @@ Note: ```config/deploy/example.rb``` has an example of the expected environment,
 
 ## Configuration
 
-* config/targets/[environment].yml
-
-It has a list of the indexing services that the dispatcher need to forward the requests to. ```config/targets/example.yml``` has an example about the expected fields in the configuration file, the actual values can be found on the configuration control.
-
-* config/secrets.yml
+Configuration is handled using the [config](https://github.com/railsconfig/config) gem. Per server settings are stored in shared_configs using normalized DLSS practices.
 
 ## Running tests
 

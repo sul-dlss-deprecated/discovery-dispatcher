@@ -8,18 +8,13 @@ module DiscoveryDispatcher
     include Singleton
 
     def targets_urls
-      parse_service_json(read_services_uris_file)
-    end
-
-    # @return a list of the services uris defined in config/targets/[RAILS_ENV].yml
-    def read_services_uris_file
-      YAML.load(File.new(Rails.root.join('config', 'targets', "#{Rails.env}.yml").to_s))
+      parse_service_json(Settings.SERVICE_TARGET_URLS)
     end
 
     def parse_service_json(services_uris)
       targets_urls = {}
       unless services_uris
-        Rails.logger.warn 'Service uris file is empty.'
+        Rails.logger.warn 'Service uris are empty.'
         return targets_urls
       end
       services_uris.each do |uri|
