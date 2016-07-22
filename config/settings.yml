@@ -2,6 +2,6 @@ PURL_FETCHER_URL: 'http://www.example.com'
 
 # Indexer targets
 SERVICE_TARGET_URLS:
-  #- 'http://www.example.com:8983/solr'
-  #- 'http://www.example2.com:8983/solr'
+  #- 'http://www.example.com'
+  #- 'http://www.example2.com'
 
