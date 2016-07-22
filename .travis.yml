@@ -6,5 +6,4 @@ notifications:
   email:
     - laneymcg@stanford.edu
 before_script:
-  - cp config/targets/example.yml config/targets/test.yml
   - "bundle exec rake db:migrate"
