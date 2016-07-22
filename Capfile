@@ -10,6 +10,7 @@ require 'capistrano/delayed_job'
 require 'capistrano/bundler'
 require 'capistrano/rails/migrations'
 require 'capistrano/rvm'
+require 'capistrano/honeybadger'
 # load 'deploy/assets'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
