@@ -9,7 +9,7 @@ set :home_directory, "/opt/app/#{fetch(:user)}"
 set :deploy_to, "#{fetch(:home_directory)}/#{fetch(:application)}"
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/honeybadger.yml}
+set :linked_files, %w{config/database.yml config/honeybadger.yml config/secrets.yml}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{config/targets log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system config/settings}
