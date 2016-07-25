@@ -6,4 +6,10 @@ namespace :discovery_dispatcher do
     DiscoveryDispatcher::Monitor.run
     File.open('log/query_purl_fetcher.log', 'a') { |f| f.write("Read the new updated items in Purl fetcher at #{Time.now}\n") }
   end
+
+  desc 'Clear out reader logs to restart indexing from the beginning of unix time'
+  task clear_reader_logs: :environment do
+    ReaderLogRecords.delete_all
+  end
+  
 end
