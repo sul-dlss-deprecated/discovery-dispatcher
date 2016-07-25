@@ -18,11 +18,8 @@ module DiscoveryDispatcher
 
       DiscoveryDispatcher::PurlFetcherManager.set_last_fetch_info end_time, records.length
     rescue => e
+      Rails.logger.error { "Purl fetcher reader failed for the query between #{start_time} and #{end_time}\n#{e.message}" }
       raise e
-      puts e.message
-      puts e.backtrace.inspect
-      # I think we need to raise_error to
-      # Rails.logger.error { "Purl fetcher reader failed for the query between #{start_time} and #{end_time}\n#{e.message}" }
     end
   end
 end
