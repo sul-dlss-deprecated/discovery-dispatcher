@@ -14,7 +14,7 @@ describe DiscoveryDispatcher::Monitor do
     end
     it 'returns an exception if one of the calls rails' do
       allow(DiscoveryDispatcher::IndexingJobManager).to receive(:enqueue_records).with(records).and_return(Exception.new)
-      expect { described_class.run }.to raise_error
+      expect { described_class.run }.to raise_error(DiscoveryDispatcher::Errors::MissingPurlFetcherIndexPage)
     end
     xit 'raises an error when no records found' do
       pending
