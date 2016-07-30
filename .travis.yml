@@ -1,7 +1,8 @@
 language: ruby
 
 rvm:
-  - 2.2.4
+  - 2.2.4 # deployed
+  - 2.3.1
 notifications:
   email:
     - laneymcg@stanford.edu
