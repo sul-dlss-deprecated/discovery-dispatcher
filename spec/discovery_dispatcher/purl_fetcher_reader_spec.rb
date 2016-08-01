@@ -1,16 +1,32 @@
 require 'json'
 
 describe DiscoveryDispatcher::PurlFetcherReader do
+  let(:change_page) { '{"changes":[{"druid":"druid:bb298yx8728","latest_change":"2015-07-03T01:00:57.046Z",
+                  "true_targets":["revs_stage"],"false_targets":["Atago","Robot_testing_feb_5_2015"]},
+                  {"druid":"druid:bx498hg0161","latest_change":"2015-09-01T17:00:11.869Z","true_targets":["SearchWorks","sw_stage"],"false_targets":["Sw-stage"]}]}' }
+
   describe '.load_records' do
-    pending
+    it 'should run without exceptions' do
+      reader = described_class.new('', '')
+      allow(RestClient).to receive(:get).and_return(change_page)
+      expect { reader.load_records }.not_to raise_error
+    end
+    it 'should throw an exception if RestClient call fails on read_change_list' do
+      reader = described_class.new('', '')
+      allow(RestClient).to receive(:get).with("#{Settings.PURL_FETCHER_URL}/docs/changes", params: {:first_modified=>"", :last_modified=>"", :content_type=>:json, :accept=>:json}).and_return(Exception.new)
+      expect { reader.load_records }.to raise_error(DiscoveryDispatcher::Errors::MissingPurlFetcherIndexPage)
+    end
+    it 'should throw an exception if RestClient call fails on read_delete_list' do
+      reader = described_class.new('', '')
+      allow(RestClient).to receive(:get).with("#{Settings.PURL_FETCHER_URL}/docs/changes", params: {:first_modified=>"", :last_modified=>"", :content_type=>:json, :accept=>:json}).and_return(change_page)
+      allow(RestClient).to receive(:get).with("#{Settings.PURL_FETCHER_URL}/docs/deletes", params: {:first_modified=>"", :last_modified=>"", :content_type=>:json, :accept=>:json}).and_return(Exception.new)
+      expect { reader.load_records }.to raise_error(DiscoveryDispatcher::Errors::MissingPurlFetcherDeletePage)
+    end
   end
 
   describe '.read_change_list' do
     it 'returns a JSON formatted hash' do
       reader = described_class.new('', '')
-      change_page = '{"changes":[{"druid":"druid:bb298yx8728","latest_change":"2015-07-03T01:00:57.046Z",
-                      "true_targets":["revs_stage"],"false_targets":["Atago","Robot_testing_feb_5_2015"]},
-                      {"druid":"druid:bx498hg0161","latest_change":"2015-09-01T17:00:11.869Z","true_targets":["SearchWorks","sw_stage"],"false_targets":["Sw-stage"]}]}'
       allow(RestClient).to receive(:get).and_return(change_page)
       expect(reader.read_change_list).to eq(JSON.parse(change_page))
     end

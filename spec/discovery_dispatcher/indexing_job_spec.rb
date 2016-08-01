@@ -44,11 +44,18 @@ describe DiscoveryDispatcher::IndexingJob do
   end
 
   describe '.run_request' do
-    it 'raises an exception for not found purl with response 202' do
+    it 'runs an index for a found purl page' do
       VCR.use_cassette('index_xz404nk7341') do
         index_job = DiscoveryDispatcher::IndexingJob.new
         url = 'http://localhost:3000/items/xz404nk7341'
         expect(index_job.run_request('xz404nk7341', 'index', url)).to be nil
+      end
+    end
+    it 'runs a delete for a found purl page' do
+      VCR.use_cassette('index_xz404nk7341') do
+        index_job = DiscoveryDispatcher::IndexingJob.new
+        url = 'http://localhost:3000/items/xz404nk7341'
+        expect(index_job.run_request('xz404nk7341', 'delete', url)).to be nil
       end
     end
     it 'raises an exception for not found purl with response 202' do
