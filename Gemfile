@@ -19,7 +19,6 @@ gem 'honeybadger', '~> 2.0'
 group :development, :test do
   gem 'dlss_cops'
   gem 'sdoc'
-  gem 'spring'
   gem 'sqlite3'
   gem 'yard'
 end
