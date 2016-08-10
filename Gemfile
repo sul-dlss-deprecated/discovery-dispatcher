@@ -8,6 +8,7 @@ gem 'daemons' # TODO: where is this used?
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 gem 'faraday'
+gem 'faraday_middleware'
 gem 'is_it_working-cbeer'
 gem 'jbuilder' # TODO: where is this used?
 gem 'rake' # needed for automation tasks
