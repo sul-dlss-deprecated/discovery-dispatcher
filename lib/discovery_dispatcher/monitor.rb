@@ -10,13 +10,15 @@ module DiscoveryDispatcher
       start_time = DiscoveryDispatcher::PurlFetcherManager.next_start_time
       end_time = Time.now
 
-      # Read the records
-      reader = DiscoveryDispatcher::PurlFetcherReader.new(start_time, end_time)
-      records = reader.load_records
+      deletes = PurlFetcher::API.new.deletes(first_modified: start_time, last_modified: end_time).map do |record|
+        PurlFetcher::RecordDeletes.new(record.deep_symbolize_keys).enqueue
+      end
 
-      DiscoveryDispatcher::IndexingJobManager.enqueue_records(records)
+      changes = PurlFetcher::API.new.changes(first_modified: start_time, last_modified: end_time).map do |record|
+        PurlFetcher::RecordChanges.new(record.deep_symbolize_keys).enqueue
+      end
 
-      DiscoveryDispatcher::PurlFetcherManager.set_last_fetch_info end_time, records.length
+      DiscoveryDispatcher::PurlFetcherManager.set_last_fetch_info end_time, (changes.size + deletes.size)
     rescue => e
       Rails.logger.error { "Purl fetcher reader failed for the query between #{start_time} and #{end_time}\n#{e.message}" }
       raise e
