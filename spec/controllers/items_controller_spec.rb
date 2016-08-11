@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ItemsController, type: :controller do
   describe 'GET #new' do
-    it 'returns http success' do
+    xit 'returns http success' do
       request.accept = "application/json"
       get :new, {:type=>'index',:druid=>'druid:oo000oo0001',:targets=>['target1']}
       expect(response).to have_http_status(:success)
