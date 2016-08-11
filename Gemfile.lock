@@ -221,7 +221,6 @@ GEM
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
-    spring (1.6.2)
     sprockets (3.6.3)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -282,7 +281,6 @@ DEPENDENCIES
   rspec
   rspec-rails
   sdoc
-  spring
   sqlite3
   vcr
   webmock
