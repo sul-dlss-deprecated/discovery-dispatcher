@@ -44,33 +44,30 @@ describe DiscoveryDispatcher::IndexingJob do
   end
 
   describe '.run_request' do
+    let(:url) { 'http://www.example.com/items/xz404nk7341' }
+    let(:connection) { instance_double(Faraday::Connection) }
+    before do
+      expect(Faraday).to receive(:new).with(url: url).and_return(connection)
+    end
     it 'runs an index for a found purl page' do
-      VCR.use_cassette('index_xz404nk7341') do
-        index_job = DiscoveryDispatcher::IndexingJob.new
-        url = 'http://localhost:3000/items/xz404nk7341'
-        expect(index_job.run_request('xz404nk7341', 'index', url)).to be nil
-      end
+      expect(connection).to receive(:put)
+        .and_return(instance_double('Faraday::Response', status: 200))
+      expect(subject.run_request('xz404nk7341', 'index', url)).to be nil
     end
     it 'runs a delete for a found purl page' do
-      VCR.use_cassette('index_xz404nk7341') do
-        index_job = DiscoveryDispatcher::IndexingJob.new
-        url = 'http://localhost:3000/items/xz404nk7341'
-        expect(index_job.run_request('xz404nk7341', 'delete', url)).to be nil
-      end
+      expect(connection).to receive(:delete)
+        .and_return(instance_double('Faraday::Response', status: 200))
+      expect(subject.run_request('xz404nk7341', 'delete', url)).to be nil
     end
     it 'raises an exception for not found purl with response 202' do
-      VCR.use_cassette('index_bb003xz2306_nopurl') do
-        index_job = DiscoveryDispatcher::IndexingJob.new
-        url = 'http://localhost:3000/items/bb003xz2306'
-        expect { index_job.run_request('bb003xz2306', 'index', url) }.to raise_error(RuntimeError)
-      end
+      expect(connection).to receive(:delete)
+        .and_return(instance_double('Faraday::Response', status: 202))
+      expect { subject.run_request('xz404nk7341', 'delete', url) }.to raise_error(RuntimeError)
     end
     it 'raises an exception with unfound host' do
-      VCR.use_cassette('index_bb003xz2306_nohost') do
-        index_job = DiscoveryDispatcher::IndexingJob.new
-        url = 'http://target-service/items/bb003xz2306'
-        expect { index_job.run_request('bb003xz2306', 'index', url) }.to raise_error(RuntimeError)
-      end
+      expect(connection).to receive(:put)
+        .and_return(instance_double('Faraday::Response', status: 404))
+      expect { subject.run_request('bb003xz2306', 'index', url) }.to raise_error(RuntimeError)
     end
   end
 
