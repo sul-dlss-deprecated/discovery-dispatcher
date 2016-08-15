@@ -25,8 +25,8 @@ module DiscoveryDispatcher
     # @param solr_target [Array] solr target for solr core
     # @return [String] RestClient request command
     def build_request_url(druid, target_url, solr_target)
-      solr_target = Array(solr_target)
-      "#{target_url}/items/#{druid}?#{solr_target.to_query('solr_target')}"
+      solr_target = { solr_target => true }
+      "#{target_url}/items/#{druid}?#{solr_target.to_query('subtargets')}"
     end
 
     # It runs the request command
@@ -58,8 +58,7 @@ module DiscoveryDispatcher
 
     # It gets the indexing service url based on the target name
     def get_target_url(target, druid)
-      target_urls_hash = Rails.configuration.target_urls_hash
-      return target_urls_hash[target]['url'] if target_urls_hash.include?(target)
+      return Settings.SERVICE_INDEXERS[target.upcase].URL if Settings.SERVICE_INDEXERS[target.upcase]
       raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
     end
 

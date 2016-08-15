@@ -246,7 +246,6 @@ GEM
       unf_ext
     unf_ext (0.0.7.1)
     unicode-display_width (0.3.1)
-    vcr (3.0.1)
     webmock (1.22.6)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -285,7 +284,6 @@ DEPENDENCIES
   rspec-rails
   sdoc
   sqlite3
-  vcr
   webmock
   whenever
   yard
