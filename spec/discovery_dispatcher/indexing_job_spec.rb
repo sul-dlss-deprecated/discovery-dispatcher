@@ -1,12 +1,17 @@
+require 'rails_helper'
+
 describe DiscoveryDispatcher::IndexingJob do
   describe '.perform' do
+    before do
+
+    end
     it 'performs the indexing process successfully' do
-      VCR.use_cassette('index_xz404nk7341') do
-        index_job = described_class.new('index', 'xz404nk7341', 'searchworkspreview')
-        expect(Rails.logger).to receive(:debug).with(/Processing/).and_call_original
-        expect(Rails.logger).to receive(:info).with(/Completed/).and_call_original
-        index_job.perform
-      end
+      stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341?subtargets%5Bsearchworkspreview%5D=true').
+        to_return(status: 200)
+      index_job = described_class.new('index', 'xz404nk7341', 'searchworkspreview')
+      expect(Rails.logger).to receive(:debug).with(/Processing/).and_call_original
+      expect(Rails.logger).to receive(:info).with(/Completed/).and_call_original
+      index_job.perform
     end
   end
 

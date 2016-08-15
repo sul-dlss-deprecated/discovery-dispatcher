@@ -32,7 +32,6 @@ group :test do
   gem 'coveralls', require: false
   gem 'rspec-rails'
   gem 'rspec'
-  gem 'vcr'
   gem 'webmock'
 end
 

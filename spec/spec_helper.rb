@@ -1,17 +1,13 @@
 require 'coveralls'
 Coveralls.wear!('rails')
-require 'vcr'
+require 'webmock/rspec'
+
+WebMock.disable_net_connect!
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]
-
-VCR.configure do |config|
-  config.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
-  config.hook_into :webmock # or :fakeweb
-  config.allow_http_connections_when_no_cassette = true
-end
 
 ENV['RAILS_ENV'] ||= 'development'
 require File.expand_path('../../config/environment', __FILE__)
