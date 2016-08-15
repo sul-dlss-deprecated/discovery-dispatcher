@@ -1,7 +1,7 @@
 PURL_FETCHER_URL: 'http://www.example.com'
 
 SERVICE_INDEXERS:
-  DEFAULT:
+  SEARCHWORKSPREVIEW:
     URL: http://www.example-indexer.com
   SEARCHWORKS:
     URL: http://www.example-indexer.com
