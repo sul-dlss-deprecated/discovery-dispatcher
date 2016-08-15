@@ -2,9 +2,8 @@ describe DiscoveryDispatcher::IndexingJob do
   describe '.perform' do
     it 'performs the indexing process successfully' do
       VCR.use_cassette('index_xz404nk7341') do
-        index_job = described_class.new('index', 'xz404nk7341', 'target1')
-        Rails.configuration.target_urls_hash = { 'target1' => { 'url' => 'http://localhost:3000' } }
-        expect_any_instance_of(DiscoveryDispatcher::IndexingJob).to receive('build_request_url').with('xz404nk7341', 'http://localhost:3000', 'target1').and_return('RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
+        index_job = described_class.new('index', 'xz404nk7341', 'default')
+        expect_any_instance_of(DiscoveryDispatcher::IndexingJob).to receive('build_request_url').with('xz404nk7341', 'http://www.example-indexer.com', 'default').and_return('RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
         expect_any_instance_of(DiscoveryDispatcher::IndexingJob).to receive('run_request').with('xz404nk7341', 'index', 'RestClient.put "http://localhost:3000/items/xz404nk7341?target1", ""')
         expect(Rails.logger).to receive(:debug).with(/Processing/).and_call_original
         expect(Rails.logger).to receive(:info).with(/Completed/).and_call_original
@@ -15,10 +14,9 @@ describe DiscoveryDispatcher::IndexingJob do
 
   describe '.get_target_url' do
     it 'returns the url for the target that exists in the targets config' do
-      Rails.configuration.target_urls_hash = { 'target1' => { 'url' => 'http://target1-service' } }
       index_job = described_class.new
-      url = index_job.get_target_url 'target1', ''
-      expect(url).to eq('http://target1-service')
+      url = index_job.get_target_url 'default', ''
+      expect(url).to eq('http://www.example-indexer.com')
     end
 
     it "raises an error if the target doesn't exist" do
@@ -75,13 +73,13 @@ describe DiscoveryDispatcher::IndexingJob do
     it 'returns a request command based on the valid input and put method ' do
       index_job = DiscoveryDispatcher::IndexingJob.new
       actual_command = index_job.build_request_url('ab123cd4567', 'http://target1-service', 'target1')
-      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?solr_target%5B%5D=target1')
+      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?subtargets%5Btarget1%5D=true')
     end
 
     it 'returns a request command based on the valid input and delete method ' do
       index_job = DiscoveryDispatcher::IndexingJob.new
       actual_command = index_job.build_request_url('ab123cd4567', 'http://target1-service', 'target2')
-      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?solr_target%5B%5D=target2')
+      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?subtargets%5Btarget2%5D=true')
     end
   end
 end

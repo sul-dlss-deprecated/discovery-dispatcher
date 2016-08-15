@@ -7,9 +7,12 @@ module PurlFetcher
     end
 
     def enqueue
-      Rails.configuration.target_urls_hash.keys.each do |target|
-        Delayed::Job.enqueue(
-          DiscoveryDispatcher::IndexingJob.new('delete', druid, target)
+      Settings.SERVICE_INDEXERS.each do |target|
+        ##
+        # The `target` here is an Array of configuration values, the first value
+        # being the name of the target.
+        Delayed::Job.enqueue(  
+          DiscoveryDispatcher::IndexingJob.new('delete', druid, target[0].to_s.downcase)
         )
       end
     end

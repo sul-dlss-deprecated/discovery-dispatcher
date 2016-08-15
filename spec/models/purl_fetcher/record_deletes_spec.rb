@@ -12,12 +12,9 @@ describe PurlFetcher::RecordDeletes do
       subject do
         described_class.new(druid: 'abc123')
       end
-      before do
-        expect(Rails.configuration).to receive(:target_urls_hash).and_return({'Revs' => '', 'SearchWorks' => ''})
-      end
       it 'enqueue a delete job' do
-        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('delete', 'abc123', 'Revs'))
-        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('delete', 'abc123', 'SearchWorks'))
+        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('delete', 'abc123', 'default'))
+        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('delete', 'abc123', 'searchworks'))
         subject.enqueue
       end
     end

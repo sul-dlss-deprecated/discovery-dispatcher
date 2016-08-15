@@ -1,7 +1,7 @@
 PURL_FETCHER_URL: 'http://www.example.com'
 
-# Indexer targets
-SERVICE_TARGET_URLS:
-  #- 'http://www.example.com'
-  #- 'http://www.example2.com'
-
+SERVICE_INDEXERS:
+  DEFAULT:
+    URL: http://www.example-indexer.com
+  SEARCHWORKS:
+    URL: http://www.example-indexer.com
