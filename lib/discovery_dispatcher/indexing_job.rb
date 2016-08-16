@@ -25,7 +25,7 @@ module DiscoveryDispatcher
     # @param solr_target [Array] solr target for solr core
     # @return [String] RestClient request command
     def build_request_url(druid, target_url, solr_target)
-      solr_target = { solr_target => true }
+      solr_target = { solr_target.upcase => true }
       "#{target_url}/items/#{druid}?#{solr_target.to_query('subtargets')}"
     end
 
