@@ -6,7 +6,7 @@ describe DiscoveryDispatcher::IndexingJob do
 
     end
     it 'performs the indexing process successfully' do
-      stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341?subtargets%5Bsearchworkspreview%5D=true').
+      stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341?subtargets%5BSEARCHWORKSPREVIEW%5D=true').
         to_return(status: 200)
       index_job = described_class.new('index', 'xz404nk7341', 'searchworkspreview')
       expect(Rails.logger).to receive(:debug).with(/Processing/).and_call_original
@@ -76,13 +76,13 @@ describe DiscoveryDispatcher::IndexingJob do
     it 'returns a request command based on the valid input and put method ' do
       index_job = DiscoveryDispatcher::IndexingJob.new
       actual_command = index_job.build_request_url('ab123cd4567', 'http://target1-service', 'target1')
-      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?subtargets%5Btarget1%5D=true')
+      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?subtargets%5BTARGET1%5D=true')
     end
 
     it 'returns a request command based on the valid input and delete method ' do
       index_job = DiscoveryDispatcher::IndexingJob.new
       actual_command = index_job.build_request_url('ab123cd4567', 'http://target1-service', 'target2')
-      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?subtargets%5Btarget2%5D=true')
+      expect(actual_command).to eq('http://target1-service/items/ab123cd4567?subtargets%5BTARGET2%5D=true')
     end
   end
 end
