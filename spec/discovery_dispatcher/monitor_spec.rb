@@ -16,7 +16,7 @@ describe DiscoveryDispatcher::Monitor do
       start_time = Time.zone.parse('2012-01-01T12:00:00 -0800')
       end_time = Time.zone.parse('2014-01-01T12:00:00 -0800')
       expect(DiscoveryDispatcher::PurlFetcherManager).to receive(:next_start_time).and_return(start_time)
-      expect(Time).to receive(:now).and_return(end_time)
+      expect(Time).to receive(:now).and_return(end_time).at_least(:once)
       expect(api_instance).to receive(:deletes).and_return(records)
         .with(first_modified: start_time, last_modified: end_time).and_return(records)
       expect(api_instance).to receive(:changes)
