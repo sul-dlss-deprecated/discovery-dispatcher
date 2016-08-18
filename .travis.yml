@@ -1,10 +1,7 @@
 language: ruby
-
 rvm:
-  - 2.2.4 # deployed
-  - 2.3.1
+  - 2.3.1 # deployed
 notifications:
-  email:
-    - laneymcg@stanford.edu
+  email: false
 before_script:
   - "bundle exec rake db:migrate"
