@@ -7,7 +7,8 @@ module DiscoveryDispatcher
     # @raise an error if the method faces any problem in reading from purl-fetcher-reader
     def self.run
       # Prepare start and end time
-      start_time = DiscoveryDispatcher::PurlFetcherManager.next_start_time.iso8601
+      start_time = DiscoveryDispatcher::PurlFetcherManager.next_start_time || Time.zone.parse('1970-01-01T12:00:00-08:00')
+      start_time = start_time.iso8601
       end_time = Time.zone.now.iso8601
 
       deletes = PurlFetcher::API.new.deletes(first_modified: start_time, last_modified: end_time).map do |record|
