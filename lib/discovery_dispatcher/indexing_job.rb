@@ -1,7 +1,8 @@
 require 'benchmark'
 
 module DiscoveryDispatcher
-  # IndexingJob represents a single job managed by Delayed_job
+  # IndexingJob represents a single job managed by Delayed_job that proccesses
+  # single subtarget index and delete requests.
   # @example Enqueue a job into Delayed job queue
   #  Delayed::Job.enqueue(IndexingJob.new(record[:type], record[:druid], target ))
   #
@@ -20,13 +21,15 @@ module DiscoveryDispatcher
       Rails.logger.info "Completed #{druid_id} for target #{target} of type #{type} in #{sprintf('%0.4f', elapsed)}s"
     end
 
+    ##
+    # By convention we are using settings on sw-indexer that specify subtargets
+    # in all caps (thus the target upcase).
     # @param druid [String] represents the druid on the form of ab123cd4567
     # @param target_url [String] the url for the indexing service
     # @param solr_target [Array] solr target for solr core
     # @return [String] RestClient request command
     def build_request_url(druid, target_url, solr_target)
-      solr_target = { solr_target.upcase => true }
-      "#{target_url}/items/#{druid}?#{solr_target.to_query('subtargets')}"
+      "#{target_url}/items/#{druid}/subtargets/#{solr_target.upcase}"
     end
 
     # It runs the request command

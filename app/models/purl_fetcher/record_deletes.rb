@@ -11,8 +11,8 @@ module PurlFetcher
         ##
         # The `target` here is an Array of configuration values, the first value
         # being the name of the target.
-        Delayed::Job.enqueue(  
-          DiscoveryDispatcher::IndexingJob.new('delete', druid, target[0].to_s.downcase)
+        Delayed::Job.enqueue(
+          DiscoveryDispatcher::DeleteFromAllIndexesJob.new('delete', druid, target[0].to_s.downcase)
         )
       end
     end
