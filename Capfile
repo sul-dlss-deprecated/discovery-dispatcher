@@ -3,11 +3,12 @@ require 'capistrano/setup'
 
 # Includes default deployment tasks
 require 'capistrano/deploy'
+
+require 'capistrano/bundler'
 require 'dlss/capistrano'
 require 'whenever/capistrano'
 require 'capistrano/passenger'
 require 'capistrano/delayed_job'
-require 'capistrano/bundler'
 require 'capistrano/rails/migrations'
 require 'capistrano/rvm'
 require 'capistrano/honeybadger'

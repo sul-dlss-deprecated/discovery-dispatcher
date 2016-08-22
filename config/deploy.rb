@@ -23,3 +23,6 @@ set :bundle_without, %w(test deployment development).join(' ')
 
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, "#{fetch(:stage)}"
+
+# Whenever
+set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
