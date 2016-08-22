@@ -1,5 +1,4 @@
-[<img src="https://travis-ci.org/sul-dlss/discovery-dispatcher.svg?branch=master" alt="Build Status" />](https://travis-ci.org/sul-dlss/discovery-dispatcher)
-[![Coverage Status](https://coveralls.io/repos/sul-dlss/discovery-dispatcher/badge.svg?branch=master)](https://coveralls.io/r/sul-dlss/discovery-dispatcher?branch=master)
+[![Build Status](https://travis-ci.org/sul-dlss/discovery-dispatcher.svg?branch=master)](https://travis-ci.org/sul-dlss/discovery-dispatcher) [![Coverage Status](https://coveralls.io/repos/sul-dlss/discovery-dispatcher/badge.svg?branch=master)](https://coveralls.io/r/sul-dlss/discovery-dispatcher?branch=master) [![Dependency Status](https://gemnasium.com/sul-dlss/discovery-dispatcher.svg)](https://gemnasium.com/sul-dlss/discovery-dispatcher)
 
 #Discovery Dispatcher
 
