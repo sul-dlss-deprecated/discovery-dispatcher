@@ -26,7 +26,7 @@ module DiscoveryDispatcher
     # in all caps (thus the target upcase).
     # @param druid [String] represents the druid on the form of ab123cd4567
     # @param target_url [String] the url for the indexing service
-    # @param solr_target [Array] solr target for solr core
+    # @param solr_target [String] solr target for solr core
     # @return [String] RestClient request command
     def build_request_url(druid, target_url, solr_target)
       "#{target_url}/items/#{druid}/subtargets/#{solr_target.upcase}"
