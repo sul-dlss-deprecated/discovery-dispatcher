@@ -120,7 +120,6 @@ GEM
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
-    is_it_working-cbeer (1.0.16)
     jbuilder (2.6.0)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -144,6 +143,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
+    okcomputer (1.11.0)
     parser (2.3.1.2)
       ast (~> 2.2)
     pkg-config (1.1.7)
@@ -279,9 +279,9 @@ DEPENDENCIES
   faraday
   faraday_middleware
   honeybadger (~> 2.0)
-  is_it_working-cbeer
   jbuilder
   mysql2
+  okcomputer
   rails (~> 4.2)
   rake
   responders

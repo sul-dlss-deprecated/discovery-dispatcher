@@ -9,7 +9,7 @@ gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 gem 'faraday'
 gem 'faraday_middleware'
-gem 'is_it_working-cbeer'
+gem 'okcomputer' # for monitoring
 gem 'jbuilder' # TODO: where is this used?
 gem 'rake' # needed for automation tasks
 gem 'responders' # TODO: where is this used?
