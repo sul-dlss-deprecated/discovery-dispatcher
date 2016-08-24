@@ -26,3 +26,6 @@ set :honeybadger_env, "#{fetch(:stage)}"
 
 # Whenever
 set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
+
+# delayed_jobs workers
+set :delayed_job_workers, 4
