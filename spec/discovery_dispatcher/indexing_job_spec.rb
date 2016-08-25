@@ -6,9 +6,15 @@ describe DiscoveryDispatcher::IndexingJob do
       stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
         to_return(status: 200)
       index_job = described_class.new('index', 'xz404nk7341', 'searchworkspreview')
-      expect(Rails.logger).to receive(:debug).with(/Processing/).and_call_original
-      expect(Rails.logger).to receive(:info).with(/Completed/).and_call_original
+      expect(Delayed::Worker.logger).to receive(:info).with(/Completed.*type index/).and_call_original
       index_job.perform
+    end
+    it 'logs errors in the indexing processings' do
+      stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
+        to_return(status: 500)
+      index_job = described_class.new('index', 'xz404nk7341', 'searchworkspreview')
+      expect(Delayed::Worker.logger).to receive(:error).with(/Cannot perform/).and_call_original
+      expect { index_job.perform }.to raise_error(RuntimeError, /index.*has an error/)
     end
   end
 
