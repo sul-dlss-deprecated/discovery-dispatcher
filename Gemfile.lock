@@ -143,7 +143,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
-    okcomputer (1.11.0)
+    okcomputer (1.11.1)
     parser (2.3.1.2)
       ast (~> 2.2)
     pkg-config (1.1.7)
