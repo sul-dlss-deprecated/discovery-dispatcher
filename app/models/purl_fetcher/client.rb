@@ -55,7 +55,7 @@ module PurlFetcher
           # auto parse the response as JSON to a Hash
           faraday.response :json
         end
-        conn.options.timeout = 10
+        conn.options.timeout = 60 # the purl-fetcher API can be a bit slow
         conn.options.open_timeout = 10
         conn
       end
