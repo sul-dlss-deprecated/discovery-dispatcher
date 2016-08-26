@@ -15,6 +15,7 @@ module PurlFetcher
           DiscoveryDispatcher::DeleteFromAllIndexesJob.new('delete', druid, target[0].to_s.downcase)
         )
       end
+      Delayed::Worker.logger.info "Enqueued delete jobs for #{druid}"
     end
   end
 end

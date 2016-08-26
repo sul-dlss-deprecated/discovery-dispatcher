@@ -15,6 +15,7 @@ describe PurlFetcher::RecordChanges do
       it 'are enqueued' do
         expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('index', 'abc123', 'SearchWorks'))
         expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('index', 'abc123', 'Revs'))
+        expect(Delayed::Worker.logger).to receive(:info).with(/Enqueued changes/)
         subject.enqueue
       end
     end
@@ -24,6 +25,7 @@ describe PurlFetcher::RecordChanges do
       end
       it 'are enqueued' do
         expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('delete', 'abc123', 'EarthWorks'))
+        expect(Delayed::Worker.logger).to receive(:info).with(/Enqueued changes/)
         subject.enqueue
       end
     end

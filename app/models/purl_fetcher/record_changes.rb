@@ -20,6 +20,7 @@ module PurlFetcher
           DiscoveryDispatcher::IndexingJob.new('delete', druid, false_target)
         )
       end
+      Delayed::Worker.logger.info "Enqueued changes jobs for #{druid}"
     end
   end
 end
