@@ -1,79 +1,61 @@
 [![Build Status](https://travis-ci.org/sul-dlss/discovery-dispatcher.svg?branch=master)](https://travis-ci.org/sul-dlss/discovery-dispatcher) [![Coverage Status](https://coveralls.io/repos/sul-dlss/discovery-dispatcher/badge.svg?branch=master)](https://coveralls.io/r/sul-dlss/discovery-dispatcher?branch=master) [![Dependency Status](https://gemnasium.com/sul-dlss/discovery-dispatcher.svg)](https://gemnasium.com/sul-dlss/discovery-dispatcher)
 
-#Discovery Dispatcher
+# Discovery Dispatcher
 
-This application is responsible for routing the indexing requests for the modified purl public xml objects to the designated indexing services.
-
-## First Time App Setup
-
-```
-rake config
-rake db:migrate
-RAILS_ENV=test rake db:migrate
-```
+Uses the [purl-fetcher](https://github.com/sul-dlss/purl-fetcher) API
+to dispatch publication events to indexing services, such as [sw-indexer](https://github.com/sul-dlss/sw-indexer).
 
 ## Deployment
 
-```
-	git clone https://github.com/sul-dlss/discovery-dispatcher.git
-	bundle install
-	cap [environment] deploy
-```
+To deploy the application, use:
 
-Note: ```config/deploy/example.rb``` has an example of the expected environment, the actual values can be found on the configuration control.
+```bash
+git clone https://github.com/sul-dlss/discovery-dispatcher.git
+cd discovery-dispatcher
+bundle install
+bundle exec cap [environment] deploy
+```
 
 ## Configuration
 
 Configuration is handled using the [config](https://github.com/railsconfig/config) gem. Per server settings are stored in shared_configs using normalized DLSS practices.
 
-## Running tests
-
-```
-rake
-```
-
-Is also run automatically via Travis-CI
-
-## Cronjob
-The dispatcher depends on a cron job that is scheduled to run every 15 minutes. You can change the schedule from ```config/schedule.rb```. The cronjob is calling "DiscoveryDispatcher.Monitor.run" to read the updates from purl fetcher server. The cronjob logs its activities on ```log/query_purl_fetcher.log```
 
 ## DelayedJob
-The dispatcher is using delayed_job as to enequque the upcoming feeds from the purl fetcher. The delayed job process is restarted automatically within each deployment. To restart the delayed_job process manaually, you need to run the following command from the release_directory
 
+We provide a basic jobs management UI -- go to `/admin`.
+
+To query purl-fetcher for new jobs to enqueue, use:
+
+```bash
+rake discovery_dispatcher:query_purl_fetcher
 ```
-	RAILS_ENV=production bundle exec bin/delayed_job stop
-	RAILS_ENV=production bundle exec bin/delayed_job start
+
+Note that `config/schedule.rb` will run this command automatically in deployed environments.
+
+To restart the workers, use:
+
+```bash
+cap [environment] delayed_job:restart
+```
+
+## Development
+
+To setup your development environment, use:
+
+```bash
+rake db:migrate
+RAILS_ENV=test rake db:migrate
+```
+
+## Running tests
+
+```bash
+rake spec
 ```
 
 ## Starting server
 
-```
+```bash
 rails s
-```
-
-## Manage the application status
-The system is expected to run automatically, you can follow the status of the jobs by visiting the following link
-
-  ``` http://discovery-dispatcher-server-name/admin/overview ```
-
-
-## Operation
-
-### To add a new indexing service
-* Go to ```config/targets/[environment].yml``` and add the new indexing service url
-
-### To update the targets list
-* If one of the registered indexing service supports a new target name, you will need to restart the discovery-dispatcher app.
-* Go to ```http://discovery-dispatcher-server-name/about/version``` to ensure the new target has been assigned.
-
-### To change the purl-fetcher url
-* Go to the ```config/settings/[environment].rb``` and modify ```PURL_FETCHER_URL``` value.
-* Restart the server
-
-## To restart the application
-
-```
-	touch tmp/restart.txt
-	RAILS_ENV=production bundle exec bin/delayed_job stop
-	RAILS_ENV=production bundle exec bin/delayed_job start
 ```
