@@ -8,7 +8,7 @@ module DiscoveryDispatcher
   #
   class IndexingJob < Struct.new(:type, :druid_id, :target)
     def perform
-      Rails.logger.debug "Processing #{druid_id} for target #{target}"
+      Delayed::Worker.logger.debug { "Processing #{druid_id} for target #{target}" }
       elapsed = Benchmark.realtime do
         druid = druid_id.gsub('druid:', '')
         target_url  = get_target_url target, druid
@@ -18,7 +18,10 @@ module DiscoveryDispatcher
         run_request(druid, type, url)
       end
       # Request went successfully
-      Rails.logger.info "Completed #{druid_id} for target #{target} of type #{type} in #{sprintf('%0.4f', elapsed)}s"
+      Delayed::Worker.logger.info "Completed #{druid_id} for target #{target} of type #{type} in #{sprintf('%0.4f', elapsed)}s"
+    rescue => e
+      Delayed::Worker.logger.error "Cannot perform job on #{druid_id} for target #{target} of type #{type} in #{e.message}"
+      raise
     end
 
     ##

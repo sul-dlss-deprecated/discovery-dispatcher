@@ -6,8 +6,7 @@ describe DiscoveryDispatcher::DeleteFromAllIndexesJob do
       stub_request(:delete, 'http://www.example-indexer.com/items/xz404nk7341').
         to_return(status: 200)
       index_job = described_class.new('delete', 'xz404nk7341', 'searchworkspreview')
-      expect(Rails.logger).to receive(:debug).with(/Processing/).and_call_original
-      expect(Rails.logger).to receive(:info).with(/Completed/).and_call_original
+      expect(Delayed::Worker.logger).to receive(:info).with(/Completed.*type delete/).and_call_original
       index_job.perform
     end
   end

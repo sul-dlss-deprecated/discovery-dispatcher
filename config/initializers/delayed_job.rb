@@ -10,3 +10,7 @@ Delayed::Worker.max_attempts = 10       # stops after about 3 hours
 # our jobs are typically sub-second. we want to mark an error and
 # move onto the next job if it does
 Delayed::Worker.max_run_time = 5.minutes
+
+# We want separate logging of the workers from the default Rails logger
+Delayed::Worker.logger = Logger.new(Rails.root.join('log', 'delayed_job.log'))
+Delayed::Worker.logger.level = Logger::DEBUG
