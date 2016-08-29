@@ -13,9 +13,9 @@ describe PurlFetcher::RecordDeletes do
         described_class.new(druid: 'abc123')
       end
       it 'enqueue a delete job' do
-        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::DeleteFromAllIndexesJob.new('delete', 'abc123', 'searchworkspreview'))
-        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::DeleteFromAllIndexesJob.new('delete', 'abc123', 'searchworks'))
-        expect(Delayed::Worker.logger).to receive(:info).with(/Enqueued delete/)
+        expect(DeleteFromAllIndexesJob).to receive(:perform_later).with('delete', 'abc123', 'searchworkspreview')
+        expect(DeleteFromAllIndexesJob).to receive(:perform_later).with('delete', 'abc123', 'searchworks')
+        expect(Rails.logger).to receive(:info).with(/Enqueued delete/)
         subject.enqueue
       end
     end

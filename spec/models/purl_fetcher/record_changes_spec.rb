@@ -13,9 +13,9 @@ describe PurlFetcher::RecordChanges do
         described_class.new(druid: 'abc123', true_targets: ['SearchWorks', 'Revs'])
       end
       it 'are enqueued' do
-        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('index', 'abc123', 'SearchWorks'))
-        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('index', 'abc123', 'Revs'))
-        expect(Delayed::Worker.logger).to receive(:info).with(/Enqueued changes/)
+        expect(IndexingJob).to receive(:perform_later).with('index', 'abc123', 'SearchWorks')
+        expect(IndexingJob).to receive(:perform_later).with('index', 'abc123', 'Revs')
+        expect(Rails.logger).to receive(:info).with(/Enqueued changes/)
         subject.enqueue
       end
     end
@@ -24,8 +24,8 @@ describe PurlFetcher::RecordChanges do
         described_class.new(druid: 'abc123', false_targets: ['EarthWorks'])
       end
       it 'are enqueued' do
-        expect(Delayed::Job).to receive(:enqueue).with(DiscoveryDispatcher::IndexingJob.new('delete', 'abc123', 'EarthWorks'))
-        expect(Delayed::Worker.logger).to receive(:info).with(/Enqueued changes/)
+        expect(IndexingJob).to receive(:perform_later).with('delete', 'abc123', 'EarthWorks')
+        expect(Rails.logger).to receive(:info).with(/Enqueued changes/)
         subject.enqueue
       end
     end

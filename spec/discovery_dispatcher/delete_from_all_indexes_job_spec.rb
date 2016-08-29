@@ -1,13 +1,12 @@
 require 'rails_helper'
 
-describe DiscoveryDispatcher::DeleteFromAllIndexesJob do
+describe DeleteFromAllIndexesJob do
   describe '.perform' do
     it 'performs the indexing process successfully' do
       stub_request(:delete, 'http://www.example-indexer.com/items/xz404nk7341').
         to_return(status: 200)
-      index_job = described_class.new('delete', 'xz404nk7341', 'searchworkspreview')
-      expect(Delayed::Worker.logger).to receive(:info).with(/Completed.*type delete/).and_call_original
-      index_job.perform
+      expect(Rails.logger).to receive(:info).with(/Completed.*type delete/).and_call_original
+      index_job = described_class.perform_now('delete', 'xz404nk7341', 'searchworkspreview')
     end
   end
   describe '.build_request_url' do
