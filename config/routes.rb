@@ -1,3 +1,4 @@
 Rails.application.routes.draw do
-  match '/admin' => DelayedJobWeb, :anchor => false, via: [:get, :post]
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/'
 end

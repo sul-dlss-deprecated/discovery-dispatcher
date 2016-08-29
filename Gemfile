@@ -5,8 +5,6 @@ gem 'rails', '~> 4.2' # specifying because we expect a major version upgrade to 
 # Application specific gems
 gem 'config'
 gem 'daemons' # TODO: where is this used?
-gem 'delayed_job_active_record'
-gem 'delayed_job_web'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'okcomputer' # for monitoring
@@ -16,6 +14,7 @@ gem 'responders' # TODO: where is this used?
 gem 'rest-client'
 gem 'whenever', require: false
 gem 'honeybadger', '~> 2.0'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'dlss_cops'
@@ -41,5 +40,5 @@ group :deployment do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
-  gem 'capistrano3-delayed-job'
+  gem 'capistrano-sidekiq'
 end
