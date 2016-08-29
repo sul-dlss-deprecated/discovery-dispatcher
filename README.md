@@ -21,9 +21,9 @@ bundle exec cap [environment] deploy
 Configuration is handled using the [config](https://github.com/railsconfig/config) gem. Per server settings are stored in shared_configs using normalized DLSS practices.
 
 
-## DelayedJob
+## Sidekiq
 
-We provide a basic jobs management UI -- go to `/admin`.
+We provide a basic jobs management UI -- go to `/`.
 
 To query purl-fetcher for new jobs to enqueue, use:
 
@@ -33,10 +33,10 @@ rake discovery_dispatcher:query_purl_fetcher
 
 Note that `config/schedule.rb` will run this command automatically in deployed environments.
 
-To restart the workers, use:
+To restart the background processes, use:
 
 ```bash
-cap [environment] delayed_job:restart
+cap [environment] sidekiq:restart
 ```
 
 ## Development
