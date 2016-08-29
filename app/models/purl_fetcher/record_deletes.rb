@@ -11,11 +11,9 @@ module PurlFetcher
         ##
         # The `target` here is an Array of configuration values, the first value
         # being the name of the target.
-        Delayed::Job.enqueue(
-          DiscoveryDispatcher::DeleteFromAllIndexesJob.new('delete', druid, target[0].to_s.downcase)
-        )
+        DeleteFromAllIndexesJob.perform_later('delete', druid, target[0].to_s.downcase)
       end
-      Delayed::Worker.logger.info "Enqueued delete jobs for #{druid}"
+      Rails.logger.info "Enqueued delete jobs for #{druid}"
     end
   end
 end

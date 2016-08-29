@@ -1,20 +1,18 @@
 require 'rails_helper'
 
-describe DiscoveryDispatcher::IndexingJob do
+describe IndexingJob do
   describe '.perform' do
     it 'performs the indexing process successfully' do
       stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
         to_return(status: 200)
-      index_job = described_class.new('index', 'xz404nk7341', 'searchworkspreview')
-      expect(Delayed::Worker.logger).to receive(:info).with(/Completed.*type index/).and_call_original
-      index_job.perform
+      expect(Rails.logger).to receive(:info).with(/Completed.*type index/).and_call_original
+      index_job = described_class.perform_now('index', 'xz404nk7341', 'searchworkspreview')
     end
     it 'logs errors in the indexing processings' do
       stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
         to_return(status: 500)
-      index_job = described_class.new('index', 'xz404nk7341', 'searchworkspreview')
-      expect(Delayed::Worker.logger).to receive(:error).with(/Cannot perform/).and_call_original
-      expect { index_job.perform }.to raise_error(RuntimeError, /index.*has an error/)
+      expect(Rails.logger).to receive(:error).with(/Cannot perform/).and_call_original
+      expect { described_class.perform_now('index', 'xz404nk7341', 'searchworkspreview') }.to raise_error(RuntimeError, /index.*has an error/)
     end
   end
 
@@ -77,13 +75,13 @@ describe DiscoveryDispatcher::IndexingJob do
 
   describe '.build_request_url' do
     it 'returns a request command based on the valid input and put method ' do
-      index_job = DiscoveryDispatcher::IndexingJob.new
+      index_job = IndexingJob.new
       actual_command = index_job.build_request_url('ab123cd4567', 'http://target1-service', 'target1')
       expect(actual_command).to eq('http://target1-service/items/ab123cd4567/subtargets/TARGET1')
     end
 
     it 'returns a request command based on the valid input and delete method ' do
-      index_job = DiscoveryDispatcher::IndexingJob.new
+      index_job = IndexingJob.new
       actual_command = index_job.build_request_url('ab123cd4567', 'http://target1-service', 'target2')
       expect(actual_command).to eq('http://target1-service/items/ab123cd4567/subtargets/TARGET2')
     end

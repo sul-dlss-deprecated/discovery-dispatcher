@@ -11,16 +11,12 @@ module PurlFetcher
 
     def enqueue
       true_targets.each do |true_target|
-        Delayed::Job.enqueue(
-          DiscoveryDispatcher::IndexingJob.new('index', druid, true_target)
-        )
+        IndexingJob.perform_later('index', druid, true_target)
       end
       false_targets.each do |false_target|
-        Delayed::Job.enqueue(
-          DiscoveryDispatcher::IndexingJob.new('delete', druid, false_target)
-        )
+        IndexingJob.perform_later('delete', druid, false_target)
       end
-      Delayed::Worker.logger.info "Enqueued changes jobs for #{druid}"
+      Rails.logger.info "Enqueued changes jobs for #{druid}"
     end
   end
 end
