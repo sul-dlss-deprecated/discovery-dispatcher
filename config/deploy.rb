@@ -27,5 +27,7 @@ set :honeybadger_env, "#{fetch(:stage)}"
 # Whenever
 set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
-# sidekiq processes
-set :sidekiq_processes, 8
+# all servers (even -dev) will be rails_env production
+set :rails_env, 'production'
+
+Capistrano::OneTimeKey.generate_one_time_key!

@@ -1,2 +1,3 @@
-Capistrano::OneTimeKey.generate_one_time_key!
-set :rails_env, 'production'
+# sidekiq processes
+set :sidekiq_processes, 1
+set :sidekiq_concurrency, 10
