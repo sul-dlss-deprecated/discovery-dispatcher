@@ -11,5 +11,12 @@ namespace :discovery_dispatcher do
   task clear_reader_logs: :environment do
     ReaderLogRecords.delete_all
   end
-  
+
+  desc 'Clear out Sidekiq jobs'
+  task clear_sidekiq: :environment do
+    Sidekiq::Queue.new('default').clear   # clear the default queue
+    Sidekiq::RetrySet.new.clear           # clear the retry set
+    Sidekiq::ScheduledSet.new.clear       # clear the scheduled set
+    Sidekiq::Stats.new.reset              # reset dashboard statistics
+  end
 end
