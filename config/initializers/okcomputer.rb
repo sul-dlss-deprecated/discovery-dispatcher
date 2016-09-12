@@ -17,6 +17,9 @@ class VersionCheck < OkComputer::AppVersionCheck
 end
 OkComputer::Registry.register 'version', VersionCheck.new
 
+# Built-in Sidekiq check
+OkComputer::Registry.register 'sidekiq', OkComputer::SidekiqLatencyCheck.new('default')
+
 ##
 # OPTIONAL checks for external services
 #
