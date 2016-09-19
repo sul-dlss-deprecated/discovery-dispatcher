@@ -9,4 +9,4 @@ Rails.application.load_tasks
 task default: :ci
 
 desc 'run continuous integration suite (tests, coverage)'
-task ci: [:spec]
+task ci: [:'db:migrate', :spec]
