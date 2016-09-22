@@ -59,3 +59,17 @@ rake spec
 ```bash
 rails s
 ```
+
+## Reindexing with Discovery Dispatcher
+
+If you deploy a new index and want to reindex everything, this can be accomplished by doing the following:
+
+Clear out the log reader
+```sh
+bundle exec rake discovery_dispatcher:clear_reader_logs
+```
+
+Clear out Sidekiq
+```sh
+bundle exec rake discovery_dispatcher:clear_sidekiq
+```
