@@ -17,4 +17,4 @@ end
 OkComputer::Registry.register 'version', VersionCheck.new
 
 # Built-in Sidekiq check
-OkComputer::Registry.register 'sidekiq', OkComputer::SidekiqLatencyCheck.new('default', 24.hours)
+OkComputer::Registry.register 'feature-sidekiq', OkComputer::SidekiqLatencyCheck.new('default', 24.hours)
