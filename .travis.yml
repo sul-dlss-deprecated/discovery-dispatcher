@@ -3,3 +3,6 @@ rvm:
   - 2.3.1 # deployed
 notifications:
   email: false
+
+before_script:
+  - bin/rails db:test:prepare
