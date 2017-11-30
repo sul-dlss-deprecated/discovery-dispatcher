@@ -8,7 +8,7 @@ describe DiscoveryDispatcher::Monitor do
       ]
     end
     let(:api_instance) { instance_double(PurlFetcher::API) }
-    let(:record_instance) { instance_double(PurlFetcher::RecordChanges, enqueue: true) }
+    let(:record_instance) { instance_double(PurlFetcher::RecordChanges, fanout: true) }
     before do
       allow(PurlFetcher::API).to receive(:new).and_return(api_instance)
     end
