@@ -12,11 +12,11 @@ module DiscoveryDispatcher
       end_time = Time.zone.now.iso8601
 
       deletes = PurlFetcher::API.new.deletes(first_modified: start_time, last_modified: end_time).map do |record|
-        PurlFetcher::RecordDeletes.new(record.deep_symbolize_keys).enqueue
+        PurlFetcher::RecordDeletes.new(record.deep_symbolize_keys).fanout
       end
 
       changes = PurlFetcher::API.new.changes(first_modified: start_time, last_modified: end_time).map do |record|
-        PurlFetcher::RecordChanges.new(record.deep_symbolize_keys).enqueue
+        PurlFetcher::RecordChanges.new(record.deep_symbolize_keys).fanout
       end
 
       DiscoveryDispatcher::PurlFetcherManager.set_last_fetch_info end_time, (changes.size + deletes.size)

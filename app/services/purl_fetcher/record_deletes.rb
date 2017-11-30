@@ -6,14 +6,20 @@ module PurlFetcher
       @latest_change = latest_change
     end
 
-    def enqueue
+    def fanout
       Settings.SERVICE_INDEXERS.each do |target|
-        ##
-        # The `target` here is an Array of configuration values, the first value
-        # being the name of the target.
-        DeleteFromAllIndexesJob.perform_later('delete', druid, target[0].to_s.downcase)
+        DeleteFromAllIndexesJob.perform_later('delete', druid, target_name(target))
       end
       Rails.logger.info "Enqueued delete jobs for #{druid}"
     end
+
+    private
+
+      ##
+      # The `target` here is an Array of configuration values, the first value
+      # being the name of the target.
+      def target_name(target)
+        target[0].to_s.downcase
+      end
   end
 end
