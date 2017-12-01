@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2' # specifying because we expect a major version upgrade to break things
+gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 
+# Use Puma as the app server
+gem 'puma', '~> 3.0'
 # Application specific gems
 gem 'config'
 gem 'daemons' # TODO: where is this used?
@@ -38,9 +40,7 @@ end
 
 group :deployment do
   gem 'dlss-capistrano'
-  gem 'capistrano-bundler'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'capistrano-rvm'
   gem 'capistrano-sidekiq'
 end
