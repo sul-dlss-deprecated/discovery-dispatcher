@@ -5,7 +5,8 @@ describe DeleteFromAllIndexesJob do
     it 'performs the indexing process successfully' do
       stub_request(:delete, 'http://www.example-indexer.com/items/xz404nk7341').
         to_return(status: 200)
-      expect(Rails.logger).to receive(:info).with(/Completed.*type delete/).and_call_original
+      allow(Rails.logger).to receive(:info).and_call_original
+      expect(Rails.logger).to receive(:info).with(/Completed.*type delete/).ordered.and_call_original
       index_job = described_class.perform_now('delete', 'xz404nk7341', 'searchworkspreview')
     end
   end
