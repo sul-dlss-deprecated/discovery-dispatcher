@@ -10,7 +10,6 @@ require 'whenever/capistrano'
 require 'capistrano/passenger'
 require 'capistrano/sidekiq'
 require 'capistrano/rails/migrations'
-require 'capistrano/rvm'
 require 'capistrano/honeybadger'
 # load 'deploy/assets'
 
