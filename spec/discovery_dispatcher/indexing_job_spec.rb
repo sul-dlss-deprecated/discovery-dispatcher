@@ -14,6 +14,10 @@ describe IndexingJob do
       expect(Rails.logger).to receive(:error).with(/Cannot perform/).and_call_original
       expect { described_class.perform_now('index', 'xz404nk7341', 'searchworkspreview') }.to raise_error(RuntimeError, /index.*has an error/)
     end
+    it 'short-circuits gracefully if the target is declared to be false' do
+      allow(Settings).to receive(:SERVICE_INDEXERS).and_return({ 'TARGET1' => false })
+      expect { described_class.perform_now('index', 'xz404nk7341', 'target1') }.not_to raise_error
+    end
   end
 
   describe '.get_target_url' do
@@ -23,8 +27,13 @@ describe IndexingJob do
       expect(url).to eq('http://www.example-indexer.com')
     end
 
+    it "returns nil if the target is defined as false" do
+      allow(Settings).to receive(:SERVICE_INDEXERS).and_return({ 'TARGETX' => false })
+      index_job = described_class.new
+      expect(index_job.get_target_url 'targetX', 'ab123cd4567').to eq nil
+    end
+
     it "raises an error if the target doesn't exist" do
-      Rails.configuration.target_urls_hash = { 'target1' => { url: 'http://target1-service' } }
       index_job = described_class.new
       expect { index_job.get_target_url 'targetX', 'ab123cd4567' }.to raise_error('Druid ab123cd4567 refers to target indexer targetX which is not registered within the application')
     end

@@ -6,6 +6,8 @@ class IndexingJob < ActiveJob::Base
     elapsed = Benchmark.realtime do
       druid = druid_id.gsub('druid:', '')
       target_url  = get_target_url target, druid
+      return unless target_url
+
       method      = get_method type, druid
 
       url = build_request_url(druid, target_url, target)
@@ -59,6 +61,7 @@ class IndexingJob < ActiveJob::Base
   # It gets the indexing service url based on the target name
   def get_target_url(target, druid)
     return Settings.SERVICE_INDEXERS[target.upcase].URL if Settings.SERVICE_INDEXERS[target.upcase]
+    return if Settings.SERVICE_INDEXERS[target.upcase] == false
     raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
   end
 
