@@ -5,13 +5,15 @@ describe IndexingJob do
     it 'performs the indexing process successfully' do
       stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
         to_return(status: 200)
+      allow(Rails.logger).to receive(:info).and_call_original
       expect(Rails.logger).to receive(:info).with(/Completed.*type index/).and_call_original
       index_job = described_class.perform_now('index', 'xz404nk7341', 'searchworkspreview')
     end
     it 'logs errors in the indexing processings' do
       stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
         to_return(status: 500)
-      expect(Rails.logger).to receive(:error).with(/Cannot perform/).and_call_original
+      allow(Rails.logger).to receive(:error).and_call_original
+      expect(Rails.logger).to receive(:error).with(/Cannot perform/).ordered.and_call_original
       expect { described_class.perform_now('index', 'xz404nk7341', 'searchworkspreview') }.to raise_error(RuntimeError, /index.*has an error/)
     end
     it 'short-circuits gracefully if the target is declared to be false' do
