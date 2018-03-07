@@ -262,8 +262,6 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (~> 3.2, >= 3.2.1)
-    sidekiq-statistic (1.2.0)
-      sidekiq (>= 3.3.4, < 5)
     simplecov (0.14.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -284,7 +282,6 @@ GEM
       tins (~> 1.0)
     thor (0.19.4)
     thread_safe (0.3.6)
-    tilt (2.0.8)
     tins (1.16.3)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
@@ -331,12 +328,10 @@ DEPENDENCIES
   rspec-rails
   sdoc
   sidekiq
-  sidekiq-statistic
   sqlite3
-  tilt
   webmock
   whenever
   yard
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
