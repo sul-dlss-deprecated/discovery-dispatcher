@@ -15,6 +15,7 @@ describe PurlFetcher::Client do
       {
         "docs": Array(1..100),
         "pages": {
+          "next_page": 2,
           "last_page?": false
         }
       }.to_json
@@ -23,6 +24,7 @@ describe PurlFetcher::Client do
       {
         "docs": Array(101..200),
         "pages": {
+          "next_page": 3,
           "last_page?": false
         }
       }.to_json
@@ -31,6 +33,7 @@ describe PurlFetcher::Client do
       {
         "docs": Array(201..300),
         "pages": {
+          "next_page": nil,
           "last_page?": true
         }
       }.to_json
