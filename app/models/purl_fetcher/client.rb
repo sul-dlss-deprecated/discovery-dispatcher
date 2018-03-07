@@ -36,9 +36,9 @@ module PurlFetcher
             yielder.yield element
           end
 
-          page += 1
+          page = data['pages']['next_page']
 
-          break if data['pages']['last_page?'] || total >= max
+          break if page.nil? || total >= max
         end
       end
     end
