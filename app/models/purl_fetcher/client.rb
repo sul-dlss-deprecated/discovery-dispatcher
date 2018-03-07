@@ -50,10 +50,11 @@ module PurlFetcher
     def connection
       @connection ||= begin
         conn = Faraday.new(url: Settings.PURL_FETCHER_URL) do |faraday|
-          faraday.adapter Faraday.default_adapter
           # Adding the FaradayMiddleware with the response set as :json, will
           # auto parse the response as JSON to a Hash
           faraday.response :json
+
+          faraday.adapter Faraday.default_adapter
         end
         conn.options.timeout = 60 # the purl-fetcher API can be a bit slow
         conn.options.open_timeout = 10
