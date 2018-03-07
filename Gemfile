@@ -17,8 +17,6 @@ gem 'rest-client'
 gem 'whenever', require: false
 gem 'honeybadger', '~> 2.0'
 gem 'sidekiq'
-gem 'sidekiq-statistic'
-gem 'tilt' # dependency of sidekiq-statistic
 
 group :development, :test do
   gem 'dlss_cops'
