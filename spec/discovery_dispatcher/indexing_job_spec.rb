@@ -64,22 +64,22 @@ describe IndexingJob do
     end
     it 'runs an index for a found purl page' do
       expect(connection).to receive(:put)
-        .and_return(instance_double('Faraday::Response', status: 200))
+        .and_return(instance_double('Faraday::Response', success?: true))
       expect(subject.run_request('xz404nk7341', 'index', url)).to be nil
     end
     it 'runs a delete for a found purl page' do
       expect(connection).to receive(:delete)
-        .and_return(instance_double('Faraday::Response', status: 200))
+        .and_return(instance_double('Faraday::Response', success?: true))
       expect(subject.run_request('xz404nk7341', 'delete', url)).to be nil
     end
-    it 'raises an exception for not found purl with response 202' do
+    it 'raises an exception for not found purl' do
       expect(connection).to receive(:delete)
-        .and_return(instance_double('Faraday::Response', status: 202))
+        .and_return(instance_double('Faraday::Response', success?: false, status: 500))
       expect { subject.run_request('xz404nk7341', 'delete', url) }.to raise_error(RuntimeError)
     end
     it 'raises an exception with unfound host' do
       expect(connection).to receive(:put)
-        .and_return(instance_double('Faraday::Response', status: 404))
+        .and_return(instance_double('Faraday::Response', success?: false, status: 500))
       expect { subject.run_request('bb003xz2306', 'index', url) }.to raise_error(RuntimeError)
     end
   end

@@ -54,8 +54,8 @@ class IndexingJob < ActiveJob::Base
     # The request doesn't raise an exception but it doesn't return data
     fail "#{type} #{druid} with #{request_url} has an error." if response.nil?
 
-    # The request return with anything other than 200, so it is a problem
-    fail "#{type} #{druid} with #{request_url} has an error.\n#{response.status}\n\n#{response.inspect}" if response.status != 200
+    # The request return with anything other than 2xx, so it is a problem
+    fail "#{type} #{druid} with #{request_url} has an error.\n#{response.status}\n\n#{response.inspect}" unless response.success?
   end
 
   # It gets the indexing service url based on the target name

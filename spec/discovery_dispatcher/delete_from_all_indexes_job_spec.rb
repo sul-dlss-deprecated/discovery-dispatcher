@@ -7,7 +7,7 @@ describe DeleteFromAllIndexesJob do
         to_return(status: 200)
       allow(Rails.logger).to receive(:info).and_call_original
       expect(Rails.logger).to receive(:info).with(/Completed.*type delete/).ordered.and_call_original
-      index_job = described_class.perform_now('delete', 'xz404nk7341', 'searchworkspreview')
+      described_class.perform_now('delete', 'xz404nk7341', 'searchworkspreview')
     end
   end
   describe '.build_request_url' do
@@ -24,12 +24,12 @@ describe DeleteFromAllIndexesJob do
     end
     it 'runs a delete for a found purl page' do
       expect(connection).to receive(:delete)
-        .and_return(instance_double('Faraday::Response', status: 200))
+        .and_return(instance_double('Faraday::Response', success?: true))
       expect(subject.run_request('xz404nk7341', 'delete', url)).to be nil
     end
-    it 'raises an exception for not found purl with response 202' do
+    it 'raises an exception for not found purl' do
       expect(connection).to receive(:delete)
-        .and_return(instance_double('Faraday::Response', status: 202))
+        .and_return(instance_double('Faraday::Response', success?: false, status: 500))
       expect { subject.run_request('xz404nk7341', 'delete', url) }.to raise_error(RuntimeError)
     end
   end
