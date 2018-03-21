@@ -15,7 +15,7 @@ gem 'rake' # needed for automation tasks
 gem 'responders' # TODO: where is this used?
 gem 'rest-client'
 gem 'whenever', require: false
-gem 'honeybadger', '~> 2.0'
+gem 'honeybadger'
 gem 'sidekiq'
 
 group :development, :test do
