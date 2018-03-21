@@ -136,7 +136,7 @@ GEM
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashdiff (0.3.7)
-    honeybadger (2.7.2)
+    honeybadger (3.3.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     i18n (0.9.5)
@@ -313,7 +313,7 @@ DEPENDENCIES
   dlss_cops
   faraday
   faraday_middleware
-  honeybadger (~> 2.0)
+  honeybadger
   jbuilder
   listen (>= 3.0.5, < 3.2)
   mysql2
