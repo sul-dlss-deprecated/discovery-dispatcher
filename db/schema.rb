@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912221106) do
+ActiveRecord::Schema.define(version: 2016_09_12_221106) do
 
   create_table "reader_log_records", force: :cascade do |t|
     t.datetime "last_read_time"
