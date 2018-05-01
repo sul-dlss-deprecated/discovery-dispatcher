@@ -4,5 +4,15 @@ rvm:
 notifications:
   email: false
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=e936a287353d2fa07d5453559c02dd24379faa691ff00fe52703216ecc90d83e
+
 before_script:
   - bin/rake db:test:prepare
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

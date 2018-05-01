@@ -32,7 +32,7 @@ group :production do
 end
 
 group :test do
-  gem 'coveralls', require: false
+  gem 'simplecov'
   gem 'rspec-rails'
   gem 'rspec'
   gem 'webmock'

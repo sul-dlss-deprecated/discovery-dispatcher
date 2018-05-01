@@ -1,13 +1,8 @@
-require 'coveralls'
-Coveralls.wear!('rails')
+require 'simplecov'
+SimpleCov.start 'rails'
 require 'webmock/rspec'
 
 WebMock.disable_net_connect!
-
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-])
 
 ENV['RAILS_ENV'] ||= 'development'
 require File.expand_path('../../config/environment', __FILE__)
