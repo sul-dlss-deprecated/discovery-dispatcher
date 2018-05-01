@@ -19,7 +19,8 @@ gem 'honeybadger'
 gem 'sidekiq'
 
 group :development, :test do
-  gem 'dlss_cops'
+  gem 'rubocop'
+  gem 'rubocop-rspec'
   gem 'sdoc'
   gem 'sqlite3'
   gem 'yard'
