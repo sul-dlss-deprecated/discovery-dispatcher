@@ -46,6 +46,7 @@ end
 
 group :production do
   gem 'mysql2'
+  gem 'newrelic_rpm'
 end
 
 group :test do
