@@ -1,7 +1,3 @@
-PURL_FETCHER_URL: 'http://www.example.com'
+PURL_FETCHER_URL: 'http://example.com'
 
-SERVICE_INDEXERS:
-  SEARCHWORKSPREVIEW:
-    URL: http://www.example-indexer.com
-  SEARCHWORKS:
-    URL: http://www.example-indexer.com
+SERVICE_INDEXERS: {}
