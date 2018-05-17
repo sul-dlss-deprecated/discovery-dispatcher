@@ -3,14 +3,14 @@ require 'rails_helper'
 describe IndexingJob do
   describe '.perform' do
     it 'performs the indexing process successfully' do
-      stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
+      stub_request(:put, 'http://example.com/indexer/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
         to_return(status: 200)
       allow(Rails.logger).to receive(:info).and_call_original
       expect(Rails.logger).to receive(:info).with(/Completed.*type index/).and_call_original
       index_job = described_class.perform_now('index', 'xz404nk7341', 'searchworkspreview')
     end
     it 'logs errors in the indexing processings' do
-      stub_request(:put, 'http://www.example-indexer.com/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
+      stub_request(:put, 'http://example.com/indexer/items/xz404nk7341/subtargets/SEARCHWORKSPREVIEW').
         to_return(status: 500)
       allow(Rails.logger).to receive(:error).and_call_original
       expect(Rails.logger).to receive(:error).with(/Cannot perform/).ordered.and_call_original
@@ -26,7 +26,7 @@ describe IndexingJob do
     it 'returns the url for the target that exists in the targets config' do
       index_job = described_class.new
       url = index_job.get_target_url 'searchworkspreview', ''
-      expect(url).to eq('http://www.example-indexer.com')
+      expect(url).to eq('http://example.com/indexer')
     end
 
     it "returns nil if the target is defined as false" do
@@ -57,7 +57,7 @@ describe IndexingJob do
   end
 
   describe '.run_request' do
-    let(:url) { 'http://www.example.com/items/xz404nk7341' }
+    let(:url) { 'http://example.com/items/xz404nk7341' }
     let(:connection) { instance_double(Faraday::Connection) }
     before do
       expect(Faraday).to receive(:new).with(url: url).and_return(connection)

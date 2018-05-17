@@ -3,7 +3,7 @@ require 'rails_helper'
 describe DeleteFromAllIndexesJob do
   describe '.perform' do
     it 'performs the indexing process successfully' do
-      stub_request(:delete, 'http://www.example-indexer.com/items/xz404nk7341').
+      stub_request(:delete, 'http://example.com/indexer/items/xz404nk7341').
         to_return(status: 200)
       allow(Rails.logger).to receive(:info).and_call_original
       expect(Rails.logger).to receive(:info).with(/Completed.*type delete/).ordered.and_call_original
@@ -12,12 +12,12 @@ describe DeleteFromAllIndexesJob do
   end
   describe '.build_request_url' do
     it 'builds a URL that references the base_indexer v3 api /items/:druid path' do
-      expect(subject.build_request_url('ab123cd4567', 'http://www.example.com', ''))
-        .to eq 'http://www.example.com/items/ab123cd4567'
+      expect(subject.build_request_url('ab123cd4567', 'http://example.com', ''))
+        .to eq 'http://example.com/items/ab123cd4567'
     end
   end
   describe '.run_request' do
-    let(:url) { 'http://www.example.com/items/xz404nk7341' }
+    let(:url) { 'http://example.com/items/xz404nk7341' }
     let(:connection) { instance_double(Faraday::Connection) }
     before do
       expect(Faraday).to receive(:new).with(url: url).and_return(connection)
