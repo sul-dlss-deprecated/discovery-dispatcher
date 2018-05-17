@@ -1,0 +1,5 @@
+SERVICE_INDEXERS:
+  SEARCHWORKSPREVIEW:
+    URL: http://www.example-indexer.com
+  SEARCHWORKS:
+    URL: http://www.example-indexer.com
