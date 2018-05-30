@@ -4,7 +4,7 @@ describe DiscoveryDispatcher::Monitor do
   describe '.run' do
     let(:records) do
       [
-        { "druid" => "", "latest_change" => "" }, { "druid" => "", "latest_change" => "" }
+        { "druid" => "", "latest_change" => "2014-01-01T12:00:00 -0800" }, { "druid" => "", "latest_change" => "2014-01-01T12:00:00 -0800" }
       ]
     end
     let(:api_instance) { instance_double(PurlFetcher::API) }
@@ -18,9 +18,9 @@ describe DiscoveryDispatcher::Monitor do
       expect(ReaderLogRecords).to receive(:last_read_time).and_return(start_time)
       expect(Time).to receive(:now).and_return(end_time).at_least(:once)
       expect(api_instance).to receive(:deletes).and_return(records)
-        .with(first_modified: start_time, last_modified: end_time).and_return(records)
+        .with(first_modified: start_time).and_return(records)
       expect(api_instance).to receive(:changes)
-        .with(first_modified: start_time, last_modified: end_time).and_return(records)
+        .with(first_modified: start_time).and_return(records)
       records.each do |record|
         expect(PurlFetcher::RecordChanges).to receive(:new).with(record.deep_symbolize_keys).and_return(record_instance)
         expect(PurlFetcher::RecordDeletes).to receive(:new).with(record.deep_symbolize_keys).and_return(record_instance)
