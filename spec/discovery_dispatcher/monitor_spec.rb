@@ -15,7 +15,7 @@ describe DiscoveryDispatcher::Monitor do
     it 'runs correctly when all data is available' do
       start_time = Time.zone.parse('2012-01-01T12:00:00 -0800')
       end_time = Time.zone.parse('2014-01-01T12:00:00 -0800')
-      expect(DiscoveryDispatcher::PurlFetcherManager).to receive(:next_start_time).and_return(start_time)
+      expect(ReaderLogRecords).to receive(:last_read_time).and_return(start_time)
       expect(Time).to receive(:now).and_return(end_time).at_least(:once)
       expect(api_instance).to receive(:deletes).and_return(records)
         .with(first_modified: start_time, last_modified: end_time).and_return(records)
@@ -25,7 +25,7 @@ describe DiscoveryDispatcher::Monitor do
         expect(PurlFetcher::RecordChanges).to receive(:new).with(record.deep_symbolize_keys).and_return(record_instance)
         expect(PurlFetcher::RecordDeletes).to receive(:new).with(record.deep_symbolize_keys).and_return(record_instance)
       end
-      expect(DiscoveryDispatcher::PurlFetcherManager).to receive(:set_last_fetch_info).with(end_time, records.length * 2)
+      expect(ReaderLogRecords).to receive(:set_last_fetch_info).with(end_time, records.length * 2)
       expect { described_class.run }.not_to raise_error
     end
     it 'returns an exception if one of the calls rails' do
