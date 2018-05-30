@@ -11,7 +11,7 @@ describe ReaderLogRecords do
       ReaderLogRecords.create(last_read_time: '2012-01-01T12:00:00 -0800', record_count: 1)
 
       start_time = described_class.last_read_time
-      expect(start_time).to eq('2012-01-01T11:58:00-08:00') # note this is minus 2 mins
+      expect(start_time).to eq('2012-01-01T12:00:00-08:00')
     end
 
     it 'returns nil as the start time for empty table' do

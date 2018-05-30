@@ -1,6 +1,4 @@
 module DiscoveryDispatcher
-  # It's responsible for initiating the purl fetcher reader since
-  # the last read time -2 minutes.
   # @example Run the monitor
   #   DiscoveryDispatcher::Monitor.run
   class Monitor
