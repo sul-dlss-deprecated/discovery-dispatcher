@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe DiscoveryDispatcher::Monitor do
-  describe '.run' do
+describe DispatcherJob do
+  describe '#perform' do
     let(:records) do
       [
         { "druid" => "", "latest_change" => "2014-01-01T12:00:00 -0800" }, { "druid" => "", "latest_change" => "2014-01-01T12:00:00 -0800" }
@@ -26,17 +26,11 @@ describe DiscoveryDispatcher::Monitor do
         expect(PurlFetcher::RecordDeletes).to receive(:new).with(record.deep_symbolize_keys).and_return(record_instance)
       end
       expect(ReaderLogRecords).to receive(:set_last_fetch_info).with(end_time, records.length * 2)
-      expect { described_class.run }.not_to raise_error
+      expect { described_class.perform_now }.not_to raise_error
     end
     it 'returns an exception if one of the calls rails' do
       allow(api_instance).to receive(:changes).and_raise(Exception.new)
-      expect { described_class.run }.to raise_error(Exception)
-    end
-    xit 'raises an error when no records found' do
-      pending
-    end
-    xit 'raises an error when set_last_fetch_info fails' do
-      pending
+      expect { described_class.perform_now }.to raise_error(Exception)
     end
   end
 end
