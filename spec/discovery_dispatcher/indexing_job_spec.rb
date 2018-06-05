@@ -41,18 +41,18 @@ describe IndexingJob do
     end
   end
 
-  describe '.get_method' do
+  describe '.validate_method!' do
     it 'returns put for index action' do
       index_job = described_class.new
-      expect(index_job.get_method('index', '')).to eq('put')
+      expect(index_job.validate_method!('index', '')).to eq('put')
     end
     it 'returns delete for delete action' do
       index_job = described_class.new
-      expect(index_job.get_method('delete', '')).to eq('delete')
+      expect(index_job.validate_method!('delete', '')).to eq('delete')
     end
     it 'raises an error for type other than index or delete' do
       index_job = described_class.new
-      expect { index_job.get_method('other', 'ab123cd4567') }.to raise_error.with_message('Druid ab123cd4567 refers to action other which is not a vaild action, use index or delete')
+      expect { index_job.validate_method!('other', 'ab123cd4567') }.to raise_error.with_message('Druid ab123cd4567 refers to action other which is not a vaild action, use index or delete')
     end
   end
 

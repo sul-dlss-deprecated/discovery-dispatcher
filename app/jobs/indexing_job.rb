@@ -8,7 +8,7 @@ class IndexingJob < ActiveJob::Base
       target_url  = get_target_url target, druid
       return unless target_url
 
-      method      = get_method type, druid
+      validate_method! type, druid
 
       url = build_request_url(druid, target_url, target)
       run_request(druid, type, url)
@@ -65,7 +65,7 @@ class IndexingJob < ActiveJob::Base
     raise "Druid #{druid} refers to target indexer #{target} which is not registered within the application"
   end
 
-  def get_method(type, druid)
+  def validate_method!(type, druid)
     return 'put' if type == 'index'
     return 'delete' if type == 'delete'
     raise "Druid #{druid} refers to action #{type} which is not a vaild action, use index or delete"
